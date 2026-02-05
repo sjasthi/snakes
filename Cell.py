@@ -14,7 +14,7 @@ class Cell:
         col (int) The column index of the cell within the grid.
     """
 
-    def __init__(self, row, col):
+    def __init__(self, row: int, col: int):
         """
         Initializes a cell with the given row and column indices. The cell is initially empty and contains the letter
         'None'
@@ -42,28 +42,28 @@ class Cell:
         position = (self.row, self.col)
         return position
 
-    def update_letter(self, letter):
+    def update_letter(self, letter: str) -> None:
         """
-        Updates the cell with a new letter and marks it as not empty. The letter will be converted to uppercase.
-
+        Updates the cell with a new letter and marks it as not empty. The letter will be converted to uppercase
         :param letter: (str) The letter to assign to the cell
+
         :return: None
         """
         self.letter = letter.upper()
         self.empty = False
 
-    def random_letter(self):
+    def random_letter(self) -> None:
         """
-        Assign a random letter to the cell and marks it as not empty. The letter will be converted to uppercase.
+        Assign a random letter to the cell and marks it as not empty. The letter will be converted to uppercase
 
         :return: None
         """
         self.letter = random.choice(string.ascii_letters).upper()
         self.empty = False
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
-        Returns a string representation of the cell.
+        Returns a string representation of the cell
 
         :return: (str) '-' if the cell is empty, or the letter if the cell is not empty
         """
