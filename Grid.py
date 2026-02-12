@@ -15,16 +15,16 @@ class Grid:
         self.quote = quote
         self.size = 15
 
-        print(self.get_quote())
+        # print(self.get_quote())
         self.parsed_quote = self.parse_quote()
 
         # Create grid with empty cells
         self.grid = [[Cell.Cell(row, col) for col in range(self.size)] for row in range(self.size)]
         self.starting_cell = self.starting_spot()
-        print(f'Starting Position: {self.starting_cell.get_position()}')
+        # print(f'Starting Position: {self.starting_cell.get_position()}')
         self.insert(self.starting_cell)
         # self.fill()
-        self.print_board()
+        # self.print_grid()
 
     def get_quote(self) -> str:
         return self.quote
@@ -38,7 +38,7 @@ class Grid:
         cleaned_string_all_removed = re.sub(r'[^a-zA-Z0-9]', '', self.quote)
         return cleaned_string_all_removed
 
-    def print_board(self) -> None:
+    def print_grid(self) -> None:
         """
         Unpack each row and separate each element inside the row with a blank space. Print the result.
         ex:
