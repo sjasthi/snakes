@@ -1,0 +1,11 @@
+# Python Cache
+__pycache__/
+*.pyc
+
+# Virtual Environments (so you don't push thousands of setup files)
+venv/
+env/
+
+# Mac/Windows Junk Files
+.DS_Store
+Thumbs.db
