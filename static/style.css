@@ -47,3 +47,30 @@ body {
     color: #005c00;
     cursor: default;
 }
+
+@media print {
+    /* Force a page break after every puzzle container */
+    .puzzle-page {
+        page-break-after: always; /* Older browsers */
+        break-after: page;        /* Modern standard */
+    }
+
+    /* Hide the Navbar and buttons from the printed PDF */
+    .navbar, .controls, #message {
+        display: none !important;
+    }
+
+    /* Clean up the styling for printing */
+    body, .game-container {
+        background-color: white !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Ensure colors print correctly (browsers sometimes strip backgrounds) */
+    .cell {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
