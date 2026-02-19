@@ -9,19 +9,23 @@ app = Flask(__name__)
 def index():
     # Load quotes
     quotes = load_quotes("quotes.txt")
-    quote = quotes[1]
 
-    # Generate puzzle
-    puzzle = Grid(quote)
+    all_puzzles = []
 
-    display_grid = puzzle.grid
-
-    puzzle.print_grid()
+    # Loop through every quotes to generate a grid for each
+    for q in quotes:
+        # Generate puzzle
+        puzzle = Grid(q)
+        
+        # Store the quote text and its specific grid layout together
+        all_puzzles.append ({
+            "quote": q,
+            "grid": puzzle.grid
+        })
 
     return render_template(
         "game.html",
-        grid=display_grid,
-        quote=quote
+        all_puzzles=all_puzzles
     )
 
 
