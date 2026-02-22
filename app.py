@@ -23,7 +23,7 @@ def index():
         })
 
     return render_template(
-        "game.html",
+        "snakes.html",
         all_puzzles=all_puzzles
     )
 
