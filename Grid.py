@@ -1,6 +1,6 @@
 import random
 import re
-import Cell
+from Cell import Cell
 
 
 class Grid:
@@ -19,11 +19,11 @@ class Grid:
         self.parsed_quote = self.parse_quote()
 
         # Create grid with empty cells
-        self.grid = [[Cell.Cell(row, col) for col in range(self.size)] for row in range(self.size)]
+        self.grid = [[Cell(row, col) for col in range(self.size)] for row in range(self.size)]
         self.starting_cell = self.starting_spot()
         # print(f'Starting Position: {self.starting_cell.get_position()}')
         self.insert(self.starting_cell)
-        # self.fill()
+        self.fill()
         # self.print_grid()
 
     def get_quote(self) -> str:

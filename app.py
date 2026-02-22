@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 from Grid import Grid
+from DropQuote import DropQuote
 from main import load_quotes
 
 app = Flask(__name__)
@@ -26,6 +27,21 @@ def index():
     return render_template(
         "game.html",
         all_puzzles=all_puzzles
+    )
+
+
+@app.route('/drop-quote')
+def drop_quote():
+    quote = "We're going up, up, up, it's our moment. You know together we're glowing. Gonna be, gonna be Golden."
+    dq = DropQuote(quote)
+    rows = dq.split_quote()
+    columns = dq.columns
+
+    return render_template(
+        'dropquote.html',
+        quote=quote,
+        rows=rows,
+        columns=columns
     )
 
 
