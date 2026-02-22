@@ -4,7 +4,6 @@ from main import load_quotes
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
     # Load quotes
