@@ -44,6 +44,16 @@ def drop_quote():
         columns=columns
     )
 
+<<<<<<< HEAD
 
 if __name__ == '__main__':
     app.run(debug=True)
+=======
+@app.route('/load-quotes')
+def load_quotes_page():
+    quotes = load_quotes("quotes.txt")
+    return render_template("load_quotes.html", quotes=quotes)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+>>>>>>> c49e6ff (Added load quotes feature)
