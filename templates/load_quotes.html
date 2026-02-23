@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Load Quotes</title>
+    </head>
+
+    <body>
+
+        <h2>Loaded Quotes</h2>
+
+        <ol>
+            {% for q in quotes %}
+            <li>{{ q }}</li>
+            {% endfor %}
+        </ol>
+
+    </body>
+
+</html>

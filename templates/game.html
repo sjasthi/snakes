@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Strands</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          Logo
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/load-quotes">Load Quotes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Snakes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('drop_quote') }}">DropQuote</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Puzzle_3</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Help</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+
+      <div class="text-center mb-4 no-print">
+        <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Generate 100-Page PDF</button>
+      </div>
+
+      {% for puzzle in all_puzzles %}
+
+      <div class="game-container puzzle-page mb-5">
+        <h1>Puzzle #{{ loop.index }}</h1>
+        <p>Find the hidden quote below.</p>
+        <p>Quote: <strong>{{ puzzle.quote }}</strong></p>
+
+        <div class="grid-container" id="grid-{{ loop.index }}">
+          {% for row_idx in range(puzzle.grid|length) %}
+          {% for col_idx in range(puzzle.grid[row_idx]|length) %}
+          <div class="cell {{ 'disabled' if puzzle.grid[row_idx][col_idx] == '-' else '' }}" data-row="{{ row_idx }}"
+            data-col="{{ col_idx }}" data-letter="{{ puzzle.grid[row_idx][col_idx] }}">
+            {{ puzzle.grid[row_idx][col_idx] }}
+          </div>
+          {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+
+</html>

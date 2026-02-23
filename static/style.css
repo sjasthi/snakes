@@ -1,0 +1,96 @@
+body {
+    font-family: sans-serif;
+    display: block;
+    justify-content: center;
+    background-color: #f0f0f0;
+}
+
+.game-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(15, 30px);
+    grid-template-columns: repeat(15, 30px);
+    gap: 10px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+/* State: Selected (Blue) */
+.cell.selected {
+    background-color: #a6d8ff;
+    border: 2px solid #007bff;
+}
+
+/* State: Found/Correct (Green) */
+.cell.found {
+    background-color: #a0e6a0;
+    color: #005c00;
+    cursor: default;
+}
+
+@media print {
+    /* Force a page break after every puzzle container */
+    .puzzle-page {
+        page-break-after: always; /* Older browsers */
+        break-after: page;        /* Modern standard */
+    }
+
+    /* Hide the Navbar and buttons from the printed PDF */
+    .navbar, .controls, #message {
+        display: none !important;
+    }
+
+    /* Clean up the styling for printing */
+    body, .game-container {
+        background-color: white !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Ensure colors print correctly (browsers sometimes strip backgrounds) */
+    .cell {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+.letters,
+.puzzle-row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 55px;
+    text-align: center;
+}
+
+.columns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+}
+
+.char,
+.quote {
+    font-size: 30px;
+}
