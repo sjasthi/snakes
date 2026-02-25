@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, redirect, request
 from Grid import Grid
 from main import load_quotes
 
