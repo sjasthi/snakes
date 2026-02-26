@@ -25,11 +25,11 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="#">Load Quotes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('load_quotes') }}">Load Quotes</a></li>
             <li class="nav-item"><a class="nav-link" href="/">Snakes</a></li>
-            <li class="nav-item"><a class="nav-link" href="/dropquote">DropQuote</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('dropquote') }}">DropQuote</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Puzzle_3</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('help') }}">Help</a></li>
           </ul>
         </div>
       </div>
@@ -44,7 +44,8 @@
         
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
