@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Snakes{% endblock %}
+
+{% block content %}
+    <div class="text-center mb-4 no-print">
+        <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Generate 100-Page PDF</button>
+    </div>
+    {% for puzzle in all_puzzles %}
+
+    <div class="game-container puzzle-page mb-5">
+        <h1>Puzzle</h1>
+        <p>Find the hidden quote below.</p>
+        <p>Quote: <strong>{{ puzzle.quote }}</strong></p>
+
+        <div class="grid-container" id="grid-{{ loop.index }}">
+            {% for row_idx in range(puzzle.grid|length) %}
+                {% for col_idx in range(puzzle.grid[row_idx]|length) %}
+                    <div class="cell {{ 'disabled' if puzzle.grid[row_idx][col_idx] == '-' else '' }}"
+                          data-row="{{ row_idx }}"
+                          data-col="{{ col_idx }}"
+                          data-letter="{{ puzzle.grid[row_idx][col_idx] }}">
+                        {{ puzzle.grid[row_idx][col_idx] }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

@@ -75,22 +75,142 @@ body {
     }
 }
 
-.letters,
-.puzzle-row {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 55px;
-    text-align: center;
+
+/* ── Drop Quote Puzzle Styles ─────────────────────────────── */
+
+.dq-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.columns {
+.dq-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.dq-instructions {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* The whole board: letter bank + arrows + answer grid stacked vertically */
+.dq-board {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 30px;
 }
 
-.char,
-.quote {
-    font-size: 30px;
+/* Letter bank row: one column stack per position */
+.dq-letter-bank {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+/* One column of stacked letters */
+.dq-col-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Each letter cell in the drop zone */
+.dq-drop-cell {
+    width: 30px;
+    height: 30px;
+    background-color: #d0e8ff;
+    border: 1px solid #90bce8;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Empty spacer so all columns reach the same height */
+.dq-empty-spacer {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+/* Arrow row between letter bank and answer grid */
+.dq-arrow-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    margin: 4px 0;
+}
+
+.dq-arrow {
+    width: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+/* Answer grid rows */
+.dq-answer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dq-answer-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+/* Blank cell: solver writes the letter here */
+.dq-answer-cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.dq-blank {
+    border-bottom: 2px solid #333;
+    background-color: transparent;
+}
+
+/* Space between words: shaded black block */
+.dq-space {
+    background-color: #333;
+    border-radius: 2px;
+}
+
+/* Punctuation like comma, period shown as-is */
+.dq-punct {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Print styles */
+@media print {
+    .dq-page {
+        box-shadow: none;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    .dq-drop-cell {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    .dq-space {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
 }
