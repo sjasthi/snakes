@@ -3,6 +3,7 @@ body {
     display: block;
     justify-content: center;
     background-color: #f0f0f0;
+    margin: 0;
 }
 
 .game-container {
@@ -67,7 +68,7 @@ body {
         margin: 0 !important;
         padding: 0 !important;
     }
-    
+
     /* Ensure colors print correctly (browsers sometimes strip backgrounds) */
     .cell {
         print-color-adjust: exact;
@@ -75,22 +76,90 @@ body {
     }
 }
 
-.letters,
-.puzzle-row {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 55px;
-    text-align: center;
+/* =========================================================
+   DropQuote page styling 
+   ========================================================= */
+
+.page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px;
 }
 
+.dropquote-header {
+    background: white;
+    padding: 16px 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 18px;
+}
+
+.dropquote-header .big-quote {
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0;
+}
+
+/* IMPORTANT: stack top-to-bottom */
+.dropquote-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Letter bank container */
+.letters {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Each column of letters */
 .columns {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    font-size: 30px;
+    gap: 8px;
 }
 
-.char,
+/* Each letter tile */
+.char {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    background: #fff;
+}
+
+/* Blank spaces area */
+.blank-spaces {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Each row of the quote (blanks) */
+.puzzle-row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 44px;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
 .quote {
-    font-size: 30px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 22px;
+    letter-spacing: 2px;
 }
