@@ -71,4 +71,3 @@ if __name__ == '__main__':
 
     for column in d.columns:
         print(column)
-    # print(len(d.columns))
