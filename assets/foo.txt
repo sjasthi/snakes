@@ -1,1 +1,5 @@
-a
+API for splitting the Telugu quotes into proper characters
+
+https://ananya.telugupuzzles.com/api.php/characters/logical?string=<input word in telugu>&language=Telugu
+
+
