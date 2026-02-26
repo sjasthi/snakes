@@ -23,7 +23,7 @@ class Grid:
         self.starting_cell = self.starting_spot()
         # print(f'Starting Position: {self.starting_cell.get_position()}')
         self.insert(self.starting_cell)
-        # self.fill()
+        self.fill()
         # self.print_grid()
 
     def get_quote(self) -> str:
