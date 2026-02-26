@@ -85,12 +85,6 @@ def dropquote():
     )
 
 
-@app.route('/load-quotes')
-def load_quotes_page():
-    quotes = load_quotes("quotes.txt")
-    return render_template("load_quotes.html", quotes=quotes)
-
-
 @app.route("/quotes/add", methods=["POST"])
 def add():
     data = request.get_json()
