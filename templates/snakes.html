@@ -3,6 +3,9 @@
 {% block title %}Snakes{% endblock %}
 
 {% block content %}
+    <div class="text-center mb-4 no-print">
+        <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Generate 100-Page PDF</button>
+    </div>
     {% for puzzle in all_puzzles %}
 
     <div class="game-container puzzle-page mb-5">

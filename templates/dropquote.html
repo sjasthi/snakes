@@ -3,10 +3,60 @@
 {% block title %}Drop Quote{% endblock %}
 
 {% block content %}
-    <div class="game-container puzzle-page mb-5">
-        <h1>Drop Quote</h1>
-        <p>Find the hidden quote below.</p>
-        <p>Quote: <strong>{{ quote }}</strong></p>
 
-    </div>
+<div class="text-center mb-4 no-print">
+    <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Print Puzzle Book</button>
+</div>
+
+{% for puzzle in all_puzzles %}
+<div class="dq-page puzzle-page">
+
+    <!-- Puzzle number header -->
+    <h2 class="dq-title">Drop Quote &nbsp;#{{ loop.index }}</h2>
+    <p class="dq-instructions">Drop the letters from each column into the blank squares below to form a quote.</p>
+
+    <!-- TOP ZONE: shuffled letters falling down per column -->
+    <div class="dq-board">
+        <div class="dq-letter-bank">
+            {% for col in puzzle.columns %}
+            <div class="dq-col-stack">
+                {% for letter in col %}
+                    <div class="dq-drop-cell">{{ letter }}</div>
+                {% endfor %}
+                <!-- Empty spacer cells so all columns are same height -->
+                {% for _ in range(puzzle.max_col_height - col|length) %}
+                    <div class="dq-drop-cell dq-empty-spacer"></div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Divider arrow row -->
+        <div class="dq-arrow-row">
+            {% for _ in range(20) %}
+            <div class="dq-arrow">↓</div>
+            {% endfor %}
+        </div>
+
+        <!-- BOTTOM ZONE: answer grid with blanks and spaces -->
+        <div class="dq-answer-grid">
+            {% for row in puzzle.rows %}
+            <div class="dq-answer-row">
+                {% for char in row %}
+                    {% if char == '_' %}
+                        <div class="dq-answer-cell dq-blank"></div>
+                    {% elif char == ' ' %}
+                        <div class="dq-answer-cell dq-space"></div>
+                    {% else %}
+                        <div class="dq-answer-cell dq-punct">{{ char }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+    </div><!-- end dq-board -->
+</div><!-- end dq-page -->
+{% endfor %}
+
 {% endblock %}

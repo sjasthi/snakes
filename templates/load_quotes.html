@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Load Quotes{% endblock %}
+
+{% block content %}
+    <h2>Loaded Quotes</h2>
+
+    <ol>
+        {% for q in quotes %}
+        <li>{{ q }}</li>
+        {% endfor %}
+    </ol>
+{% endblock %}

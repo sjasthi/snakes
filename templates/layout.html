@@ -25,21 +25,17 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('load_quotes') }}">Load Quotes</a></li>
-            <li class="nav-item"><a class="nav-link" href="/">Snakes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('load_quotes_page') }}">Load Quotes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Snakes</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('dropquote') }}">DropQuote</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Puzzle_3</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('help') }}">Help</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
     <div class="container mt-5">
-        <div class="text-center mb-4 no-print">
-            <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Generate 100-Page PDF</button>
-        </div>
-
         {% block content %} {% endblock %}
         
     </div>
