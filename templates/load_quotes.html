@@ -3,9 +3,45 @@
 
     <head>
         <title>Load Quotes</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
 
     <body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                Logo
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('load_quotes_page') }}">Load Quotes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Snakes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('drop_quote') }}">DropQuote</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Puzzle_3</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Help</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
 
         <h2>Loaded Quotes</h2>
 
@@ -14,6 +50,74 @@
             <li>{{ q }}</li>
             {% endfor %}
         </ol>
+
+    <h2>Add a Quote</h2>
+    <input id="add-quote-input" placeholder="Enter quote">
+    <button onclick="addQuote()">Add</button>
+
+    <h2>Remove a Quote</h2>
+    <input id="remove-quote-input" placeholder="Enter index (1-based)">
+    <button onclick="removeQuote()">Remove</button>
+
+    <h2>Replace a Quote</h2>
+    <input id="replace-index-input" placeholder="Enter index (1-based)">
+    <input id="replace-text-input" placeholder="Enter new quote">
+    <button onclick="replaceQuote()">Replace</button>
+
+    <script>
+    function addQuote() {
+        const quote = document.getElementById("add-quote-input").value;
+
+        fetch("/quotes/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ quote: quote })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            location.reload();
+        });
+    }
+
+    function removeQuote() {
+        const index = parseInt(document.getElementById("remove-quote-input").value, 10);
+
+        fetch("/quotes/remove", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ index: index })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            location.reload();
+        });
+    }
+
+    function replaceQuote() {
+        const index = parseInt(document.getElementById("replace-index-input").value, 10);
+        const newQuote = document.getElementById("replace-text-input").value;
+
+        fetch("/quotes/replace", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ index: index, quote: newQuote })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            location.reload();
+        });
+    }
+    </script>
+
 
     </body>
 
