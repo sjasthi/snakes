@@ -3,7 +3,6 @@ body {
     display: block;
     justify-content: center;
     background-color: #f0f0f0;
-    margin: 0;
 }
 
 .game-container {
@@ -68,7 +67,7 @@ body {
         margin: 0 !important;
         padding: 0 !important;
     }
-
+    
     /* Ensure colors print correctly (browsers sometimes strip backgrounds) */
     .cell {
         print-color-adjust: exact;
@@ -76,90 +75,142 @@ body {
     }
 }
 
-/* =========================================================
-   DropQuote page styling 
-   ========================================================= */
 
-.page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 16px;
-}
+/* ── Drop Quote Puzzle Styles ─────────────────────────────── */
 
-.dropquote-header {
+.dq-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
     background: white;
-    padding: 16px 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    margin-bottom: 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.dropquote-header .big-quote {
-    font-size: 26px;
-    line-height: 1.25;
-    margin: 0;
+.dq-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
-/* IMPORTANT: stack top-to-bottom */
-.dropquote-layout {
+.dq-instructions {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* The whole board: letter bank + arrows + answer grid stacked vertically */
+.dq-board {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    align-items: center;
 }
 
-/* Letter bank container */
-.letters {
-    background: white;
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+/* Letter bank row: one column stack per position */
+.dq-letter-bank {
     display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 2px;
 }
 
-/* Each column of letters */
-.columns {
+/* One column of stacked letters */
+.dq-col-stack {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    gap: 2px;
 }
 
-/* Each letter tile */
-.char {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    font-size: 22px;
-    display: inline-flex;
+/* Each letter cell in the drop zone */
+.dq-drop-cell {
+    width: 30px;
+    height: 30px;
+    background-color: #d0e8ff;
+    border: 1px solid #90bce8;
+    border-radius: 4px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    background: #fff;
+    font-size: 16px;
+    font-weight: bold;
 }
 
-/* Blank spaces area */
-.blank-spaces {
-    background: white;
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+/* Empty spacer so all columns reach the same height */
+.dq-empty-spacer {
+    background-color: transparent;
+    border-color: transparent;
 }
 
-/* Each row of the quote (blanks) */
-.puzzle-row {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 44px;
-    gap: 10px;
+/* Arrow row between letter bank and answer grid */
+.dq-arrow-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    margin: 4px 0;
+}
+
+.dq-arrow {
+    width: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+/* Answer grid rows */
+.dq-answer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dq-answer-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+/* Blank cell: solver writes the letter here */
+.dq-answer-cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
-.quote {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    font-size: 22px;
-    letter-spacing: 2px;
+.dq-blank {
+    border-bottom: 2px solid #333;
+    background-color: transparent;
+}
+
+/* Space between words: shaded black block */
+.dq-space {
+    background-color: #333;
+    border-radius: 2px;
+}
+
+/* Punctuation like comma, period shown as-is */
+.dq-punct {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Print styles */
+@media print {
+    .dq-page {
+        box-shadow: none;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    .dq-drop-cell {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    .dq-space {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
 }

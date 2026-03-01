@@ -1,69 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DropQuote</title>
+{% extends "layout.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}Drop Quote{% endblock %}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% block content %}
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            Logo
-        </a>
+<div class="text-center mb-4 no-print">
+    <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Print Puzzle Book</button>
+</div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+{% for puzzle in all_puzzles %}
+<div class="dq-page puzzle-page">
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Load Quotes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Snakes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('drop_quote') }}">DropQuote</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Puzzle_3</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Help</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <!-- Puzzle number header -->
+    <h2 class="dq-title">Drop Quote &nbsp;#{{ loop.index }}</h2>
+    <p class="dq-instructions">Drop the letters from each column into the blank squares below to form a quote.</p>
 
-    <div class="quote">{{quote}}</div>
-
-    <div class="letters">
-        {% for column in columns %}
-            <span class="columns">
-                {% for char in column %}
-                    <span class="char">{{ char }}</span>
+    <!-- TOP ZONE: shuffled letters falling down per column -->
+    <div class="dq-board">
+        <div class="dq-letter-bank">
+            {% for col in puzzle.columns %}
+            <div class="dq-col-stack">
+                {% for letter in col %}
+                    <div class="dq-drop-cell">{{ letter }}</div>
                 {% endfor %}
-            </span>
-        {% endfor %}
-    </div>
-
-    <div class="blank-spaces">
-        {% for row in rows %}
-        <div class="puzzle-row">
-            {% for char in row %}
-                <span class="char">{{ char }}</span>
+                <!-- Empty spacer cells so all columns are same height -->
+                {% for _ in range(puzzle.max_col_height - col|length) %}
+                    <div class="dq-drop-cell dq-empty-spacer"></div>
+                {% endfor %}
+            </div>
             {% endfor %}
         </div>
-    {% endfor %}
-    </div>
 
-</body>
-</html>
+        <!-- Divider arrow row -->
+        <div class="dq-arrow-row">
+            {% for _ in range(20) %}
+            <div class="dq-arrow">↓</div>
+            {% endfor %}
+        </div>
+
+        <!-- BOTTOM ZONE: answer grid with blanks and spaces -->
+        <div class="dq-answer-grid">
+            {% for row in puzzle.rows %}
+            <div class="dq-answer-row">
+                {% for char in row %}
+                    {% if char == '_' %}
+                        <div class="dq-answer-cell dq-blank"></div>
+                    {% elif char == ' ' %}
+                        <div class="dq-answer-cell dq-space"></div>
+                    {% else %}
+                        <div class="dq-answer-cell dq-punct">{{ char }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+    </div><!-- end dq-board -->
+</div><!-- end dq-page -->
+{% endfor %}
+
+{% endblock %}
