@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}Puzzle 3{% endblock %}
+
+{% block content %}
+
+<h1>Puzzle 3</h1>
+
+{% for item in puzzle.results %}
+    <div>
+        {% if item.image %}
+            <img src="{{ url_for('static', filename=item.image) }}" width="150">
+        {% endif %}
+        <p>{{ item.matches }}/{{ item.total }}</p>
+    </div>
+{% endfor %}
+
+{% endblock %}

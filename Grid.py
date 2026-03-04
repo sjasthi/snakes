@@ -1,6 +1,29 @@
 import random
 import re
+import requests
+import unicodedata
 from Cell import Cell
+
+
+def ananya(quote: str) -> list[str]:
+    """
+    Uses api to break a given quote into individual character. Works for English and Telugu characters.
+    Args:
+        quote (str): The quote to break down
+
+    Returns:
+        A list of each character in the string
+    """
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' +
+                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+    }
+
+    api_url = f'https://jasthi.com/ananya/api.php/characters/logical?string={quote}&language=Telugu'
+    response = requests.get(api_url, headers=headers)
+    data = response.json()
+
+    return data['result']
 
 
 class Grid:
@@ -12,7 +35,7 @@ class Grid:
         size (int): The size of the grid. Set to be 15x15.
     """
     def __init__(self, quote: str):
-        self.quote = quote
+        self.quote = ananya(quote)
         self.size = 15
 
         # print(self.get_quote())
@@ -26,17 +49,15 @@ class Grid:
         self.fill()
         # self.print_grid()
 
-    def get_quote(self) -> str:
-        return self.quote
-
-    def parse_quote(self) -> str:
+    def parse_quote(self) -> list[str]:
         """
-        Remove all special characters from quote
+        Remove all special characters from quote. Works for telugu characters.
 
         :return: Cleaned string with all special characters removed
         """
-        cleaned_string_all_removed = re.sub(r'[^a-zA-Z0-9]', '', self.quote)
-        return cleaned_string_all_removed
+        return [cluster
+                for cluster in self.quote
+                if all(unicodedata.category(ch)[0] in ("L", "N", "M") for ch in cluster)]
 
     def print_grid(self) -> None:
         """
@@ -145,3 +166,13 @@ class Grid:
             for cell in row:
                 if cell.empty:
                     cell.random_letter()
+
+
+if __name__ == '__main__':
+    q = 'You do not have to be great to start but you have to start to be great.'
+    q1 = 'పక్షులు మనకు సహజమైన స్నేహితులు - వారు మనకు నేర్పిస్తారు సహనం మరియు ప్రేమను.'
+    g = Grid(q1)
+
+    print(g.quote)
+    print(g.parsed_quote)
+    # g.print_grid()
