@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from Grid import Grid
 from DropQuote import DropQuote
+from Puzzle3 import Puzzle3
 from main import load_quotes
 
 app = Flask(__name__)
@@ -117,6 +118,13 @@ def replace():
     replace_quote(q, index, new_text)
 
     return jsonify({"message": "Quote replaced", "index": index, "new": new_text})
+
+
+@app.route("/puzzle_3")
+def puzzle_3():
+    word = "knife"
+    p = Puzzle3(word)
+    return render_template("puzzle3.html", puzzle=p)
 
 
 if __name__ == '__main__':
