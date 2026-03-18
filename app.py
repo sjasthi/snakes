@@ -8,8 +8,6 @@ app = Flask(__name__)
 
 def rewrite_text_file(q):
     with open('quotes.txt', 'w', encoding='utf-8') as f:
-        pass
-    with open('quotes.txt', 'a', encoding='utf-8') as f:
         for quote in q:
             f.write(f'{quote}\n')
 
