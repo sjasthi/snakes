@@ -1,74 +1,129 @@
-body {
-    font-family: sans-serif;
-    display: block;
-    justify-content: center;
-    background-color: #f0f0f0;
-}
+/* Google Font to match the clean sans-serif look */
+@import url('https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;700&family=Inter:wght@400;600;700&display=swap');
 
 .game-container {
     text-align: center;
-    margin-top: 50px;
+    margin: 40px auto;
+    max-width: 700px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
+.game-container h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.game-container p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.game-container strong {
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+/* Grid */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(15, 30px);
-    grid-template-columns: repeat(15, 30px);
-    gap: 10px;
-    margin: 20px auto;
+    grid-template-columns: repeat(15, 36px);
+    gap: 6px;
+    margin: 16px auto;
     width: fit-content;
 }
 
+/* Default cell — light grey circle like Strands */
 .cell {
-    width: 30px;
-    height: 30px;
-    background-color: white;
+    width: 36px;
+    height: 36px;
+    background-color: #f0f0f0;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
     cursor: pointer;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     user-select: none;
-    transition: background-color 0.2s;
+    transition: background-color 0.15s, transform 0.1s;
 }
 
-/* State: Selected (Blue) */
+.cell:hover {
+    background-color: #dde8ff;
+    transform: scale(1.08);
+}
+
+/* Selected — blue highlight like Strands */
 .cell.selected {
-    background-color: #a6d8ff;
-    border: 2px solid #007bff;
+    background-color: #b8d0ff;
+    color: #1a1a1a;
 }
 
-/* State: Found/Correct (Green) */
+/* Found / correct path — gold/yellow like Strands theme words */
 .cell.found {
-    background-color: #a0e6a0;
-    color: #005c00;
+    background-color: #f7da64;
+    color: #1a1a1a;
     cursor: default;
 }
 
-@media print {
-    /* Force a page break after every puzzle container */
-    .puzzle-page {
-        page-break-after: always; /* Older browsers */
-        break-after: page;        /* Modern standard */
-    }
+/* Disabled / filler cells */
+.cell.disabled {
+    background-color: #f0f0f0;
+    color: #aaa;
+    cursor: default;
+}
 
-    /* Hide the Navbar and buttons from the printed PDF */
-    .navbar, .controls, #message {
+/* Print styles */
+@page {
+    margin: 1cm;
+    size: A4 portrait;
+}
+
+@media print {
+    .puzzle-page {
+        page-break-after: always;
+        break-after: page;
+    }
+    .navbar, .controls, #message, .no-print {
         display: none !important;
     }
-
-    /* Clean up the styling for printing */
-    body, .game-container {
+    html, body {
         background-color: white !important;
-        box-shadow: none !important;
         margin: 0 !important;
         padding: 0 !important;
+        width: 100% !important;
     }
-    
-    /* Ensure colors print correctly (browsers sometimes strip backgrounds) */
+    body {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    .game-container {
+        background-color: white !important;
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        padding: 10px !important;
+        width: 100% !important;
+        max-width: 680px !important;
+        text-align: center !important;
+        float: none !important;
+    }
+    .grid-container {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
     .cell {
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;

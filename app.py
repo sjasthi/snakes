@@ -44,7 +44,8 @@ def index():
         # Store the quote text and its specific grid layout together
         all_puzzles.append ({
             "quote": q,
-            "grid": puzzle.grid
+            "grid": puzzle.grid,
+            "size": puzzle.size
         })
 
     return render_template(
@@ -90,7 +91,7 @@ def add():
     data = request.get_json()
     quote = data.get("quote")
 
-    q = load_quotes()
+    q = load_quotes("quotes.txt")
     add_quote(q, quote)
 
     return jsonify({"message": "Quote added", "quote": quote})
@@ -101,7 +102,7 @@ def remove():
     data = request.get_json()
     index = data.get("index")
 
-    q = load_quotes()
+    q = load_quotes("quotes.txt")
     remove_quote(q, index)
 
     return jsonify({"message": "Quote removed", "index": index})
@@ -113,7 +114,7 @@ def replace():
     index = data.get("index")
     new_text = data.get("quote")
 
-    q = load_quotes()
+    q = load_quotes("quotes.txt")
     replace_quote(q, index, new_text)
 
     return jsonify({"message": "Quote replaced", "index": index, "new": new_text})
