@@ -17,13 +17,16 @@ def rewrite_text_file(q):
         for quote in q:
             f.write(f'{quote}\n')
 
+
 def add_quote(q, add):
     q.append(add)
     rewrite_text_file(q)
 
+
 def remove_quote(q, q_index):
     del q[q_index - 1]
     rewrite_text_file(q)
+
 
 def replace_quote(q, q_index, string):
     q[q_index - 1] = string
@@ -137,6 +140,7 @@ def add():
         return jsonify({"error": "Empty quote"}), 400
     q = load_quotes("quotes.txt")
     add_quote(q, quote)
+
     return jsonify({"message": "Quote added", "quote": quote})
 
 
@@ -148,6 +152,7 @@ def remove():
     if not index or index < 1 or index > len(q):
         return jsonify({"error": "Invalid index"}), 400
     remove_quote(q, index)
+
     return jsonify({"message": "Quote removed", "index": index})
 
 
