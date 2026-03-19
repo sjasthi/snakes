@@ -1,5 +1,22 @@
 import string
 import random
+import requests
+
+
+def telugu_filler():
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' +
+                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+    }
+
+    api_url = 'https://jasthi.com/ananya/api.php/characters/filler?language=telugu&count=100'
+    response = requests.get(api_url, headers=headers)
+    data = response.json()
+
+    return data['result']
+
+
+tel_filler = telugu_filler()
 
 
 class Cell:
@@ -52,14 +69,18 @@ class Cell:
         self.letter = letter.upper()
         self.empty = False
 
-    def random_letter(self) -> None:
+    def random_letter(self, english) -> None:
         """
         Assign a random letter to the cell and marks it as not empty. The letter will be converted to uppercase
 
         :return: None
         """
-        self.letter = random.choice(string.ascii_letters).upper()
-        self.empty = False
+        if english:
+            self.letter = random.choice(string.ascii_letters).upper()
+            self.empty = False
+        else:
+            self.letter = self.letter = random.choice(tel_filler)
+            self.empty = False
 
     def __str__(self) -> str:
         """

@@ -43,7 +43,7 @@ def index():
         puzzle = Grid(q)
         
         # Store the quote text and its specific grid layout together
-        all_puzzles.append ({
+        all_puzzles.append({
             "quote": q,
             "grid": puzzle.grid
         })

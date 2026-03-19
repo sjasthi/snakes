@@ -1,7 +1,7 @@
 import random
-import re
 import requests
 import unicodedata
+import string
 from Cell import Cell
 
 
@@ -40,7 +40,7 @@ class Grid:
 
         # print(self.get_quote())
         self.parsed_quote = self.parse_quote()
-
+        self.english = self.detect_language(self.parsed_quote)
         # Create grid with empty cells
         self.grid = [[Cell(row, col) for col in range(self.size)] for row in range(self.size)]
         self.starting_cell = self.starting_spot()
@@ -165,7 +165,35 @@ class Grid:
         for row in self.grid:
             for cell in row:
                 if cell.empty:
-                    cell.random_letter()
+                    cell.random_letter(self.english)
+
+    def detect_language(self, quote):
+        telugu_count = 0
+        english_count = 0
+
+        for cluster in quote:  # Cluster may be multiple chars
+            for char in cluster:  # Iterate actual characters
+
+                if char in string.whitespace or char in string.punctuation or char.isdigit():
+                    continue
+
+                code = ord(char)
+
+                if 0x0C00 <= code <= 0x0C7F:
+                    telugu_count += 1
+                elif char.isascii() and char.isalpha():
+                    english_count += 1
+
+        total = telugu_count + english_count
+        if total == 0:
+            return "Unknown"
+
+        if telugu_count / total > 0.6:
+            return False  # Telugu
+        elif english_count / total > 0.6:
+            return True  # English
+
+        return "Mixed"
 
 
 if __name__ == '__main__':
@@ -173,6 +201,8 @@ if __name__ == '__main__':
     q1 = 'పక్షులు మనకు సహజమైన స్నేహితులు - వారు మనకు నేర్పిస్తారు సహనం మరియు ప్రేమను.'
     g = Grid(q1)
 
-    print(g.quote)
-    print(g.parsed_quote)
-    # g.print_grid()
+    # print(g.quote)
+    # print(g.parsed_quote)
+    g.print_grid()
+
+
