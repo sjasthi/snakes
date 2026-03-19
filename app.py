@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from Grid import Grid
 from DropQuote import DropQuote
+from Puzzle3 import Puzzle3
 from main import load_quotes
 import re
 import json
@@ -169,6 +170,13 @@ def clear_cache():
         if os.path.exists(f):
             os.remove(f)
     return jsonify({"message": "Cache cleared"})
+
+@app.route("/puzzle_3")
+def puzzle_3():
+    word = "knife"
+    p = Puzzle3(word)
+    return render_template("puzzle3.html", puzzle=p)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
