@@ -5,78 +5,55 @@
 {% block content %}
     <h2>Loaded Quotes</h2>
 
-    <ol>
-        {% for q in quotes %}
-        <li>{{ q }}</li>
-        {% endfor %}
-    </ol>
+    <table id="quotesTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Quote</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quote in quotes %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ quote }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
 
-    <h2>Add a Quote</h2>
-    <input id="add-quote-input" placeholder="Enter quote">
-    <button onclick="addQuote()">Add</button>
+    </table>
 
-    <h2>Remove a Quote</h2>
-    <input id="remove-quote-input" placeholder="Enter index (1-based)">
-    <button onclick="removeQuote()">Remove</button>
+    <div class="mb-4">
 
-    <h2>Replace a Quote</h2>
-    <input id="replace-index-input" placeholder="Enter index (1-based)">
-    <input id="replace-text-input" placeholder="Enter new quote">
-    <button onclick="replaceQuote()">Replace</button>
+        <!-- Add -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Add Quote</label>
+            <div class="input-group">
+            <input id="add-quote-input" type="text" class="form-control" placeholder="Enter new quote">
+            <button class="btn btn-success" onclick="addQuote()">Add</button>
+            </div>
+        </div>
 
-    <script>
-    function addQuote() {
-        const quote = document.getElementById("add-quote-input").value;
+        <!-- Remove -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Remove Quote</label>
+            <div class="input-group">
+            <input id="remove-quote-input" type="number" class="form-control" placeholder="Quote # to remove">
+            <button class="btn btn-danger" onclick="removeQuote()">Remove</button>
+            </div>
+        </div>
 
-        fetch("/quotes/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ quote: quote })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            location.reload();
-        });
-    }
+        <!-- Replace -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Replace Quote</label>
+            <div class="input-group">
+            <input id="replace-index-input" type="number" class="form-control" placeholder="Quote #" style="max-width: 120px">
+            <input id="replace-text-input" type="text" class="form-control" placeholder="New quote text">
+            <button class="btn btn-warning" onclick="replaceQuote()">Replace</button>
+            </div>
+        </div>
 
-    function removeQuote() {
-        const index = parseInt(document.getElementById("remove-quote-input").value, 10);
-
-        fetch("/quotes/remove", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ index: index })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            location.reload();
-        });
-    }
-
-    function replaceQuote() {
-        const index = parseInt(document.getElementById("replace-index-input").value, 10);
-        const newQuote = document.getElementById("replace-text-input").value;
-
-        fetch("/quotes/replace", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ index: index, quote: newQuote })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            location.reload();
-        });
-    }
-    </script>
+    </div>
 
 {% endblock %}
 

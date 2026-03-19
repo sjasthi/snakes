@@ -4,26 +4,97 @@
 
 {% block content %}
 
-<div class="text-center mb-4 no-print">
-    <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Print Puzzle Book</button>
+<!-- ── Preferences Bar ── -->
+<div class="pref-bar no-print mb-4">
+    <form method="GET" action="{{ url_for('dropquote') }}"
+          class="d-flex flex-wrap align-items-center gap-3">
+
+        <!-- Column Width -->
+        <div class="pref-group">
+            <label class="pref-label">Column Width</label>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="col_width"
+                       id="w10" value="10"
+                       {% if col_width == 10 %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-success btn-sm" for="w10">10</label>
+
+                <input type="radio" class="btn-check" name="col_width"
+                       id="w15" value="15"
+                       {% if col_width == 15 %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-primary btn-sm" for="w15">15</label>
+
+                <input type="radio" class="btn-check" name="col_width"
+                       id="w20" value="20"
+                       {% if col_width == 20 %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-warning btn-sm" for="w20">20</label>
+
+                <input type="radio" class="btn-check" name="col_width"
+                       id="w25" value="25"
+                       {% if col_width == 25 %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-danger btn-sm" for="w25">25</label>
+            </div>
+        </div>
+
+        <!-- Show Solution -->
+        <div class="pref-group">
+            <label class="pref-label">Solution</label>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="show_solution"
+                       id="dq-sol-hide" value="false"
+                       {% if not show_solution %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-secondary btn-sm" for="dq-sol-hide">
+                    Hidden
+                </label>
+
+                <input type="radio" class="btn-check" name="show_solution"
+                       id="dq-sol-show" value="true"
+                       {% if show_solution %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-warning btn-sm" for="dq-sol-show">
+                    Revealed
+                </label>
+            </div>
+        </div>
+
+        <!-- Print -->
+        <button type="button" class="btn btn-dark btn-sm ms-auto no-print"
+                onclick="window.print()">
+            🖨️ Print Puzzle Book
+        </button>
+
+    </form>
 </div>
 
+<!-- ── Puzzles ── -->
 {% for puzzle in all_puzzles %}
 <div class="dq-page puzzle-page">
 
-    <!-- Puzzle number header -->
-    <h2 class="dq-title">Drop Quote &nbsp;#{{ loop.index }}</h2>
-    <p class="dq-instructions">Drop the letters from each column into the blank squares below to form a quote.</p>
+    <h2 class="dq-title">Drop Quote #{{ loop.index }}</h2>
+    <p class="dq-instructions">
+        Drop the letters from each column into the blank squares below to form a quote.
+    </p>
 
-    <!-- TOP ZONE: shuffled letters falling down per column -->
+    <!-- Show solution if preference is on -->
+    {% if show_solution %}
+    <p class="dq-solution no-print">
+        <strong>Answer:</strong> {{ puzzle.quote }}
+    </p>
+    {% endif %}
+
     <div class="dq-board">
+
+        <!-- Letter bank -->
         <div class="dq-letter-bank">
             {% for col in puzzle.columns %}
             <div class="dq-col-stack">
                 {% for letter in col %}
                     <div class="dq-drop-cell">{{ letter }}</div>
                 {% endfor %}
-                <!-- Empty spacer cells so all columns are same height -->
                 {% for _ in range(puzzle.max_col_height - col|length) %}
                     <div class="dq-drop-cell dq-empty-spacer"></div>
                 {% endfor %}
@@ -31,20 +102,27 @@
             {% endfor %}
         </div>
 
-        <!-- Divider arrow row -->
+        <!-- Arrow row -->
         <div class="dq-arrow-row">
-            {% for _ in range(20) %}
+            {% for _ in range(puzzle.col_width) %}
             <div class="dq-arrow">↓</div>
             {% endfor %}
         </div>
 
-        <!-- BOTTOM ZONE: answer grid with blanks and spaces -->
+        <!-- Answer grid -->
         <div class="dq-answer-grid">
             {% for row in puzzle.rows %}
             <div class="dq-answer-row">
                 {% for char in row %}
                     {% if char == '_' %}
-                        <div class="dq-answer-cell dq-blank"></div>
+                        <!-- Show letter if solution revealed, blank otherwise -->
+                        {% if show_solution %}
+                            <div class="dq-answer-cell dq-revealed">
+                                {{ puzzle.quote[loop.index0] if loop.index0 < puzzle.quote|length else '' }}
+                            </div>
+                        {% else %}
+                            <div class="dq-answer-cell dq-blank"></div>
+                        {% endif %}
                     {% elif char == ' ' %}
                         <div class="dq-answer-cell dq-space"></div>
                     {% else %}
@@ -55,8 +133,8 @@
             {% endfor %}
         </div>
 
-    </div><!-- end dq-board -->
-</div><!-- end dq-page -->
+    </div>
+</div>
 {% endfor %}
 
 {% endblock %}

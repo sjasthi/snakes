@@ -34,15 +34,19 @@ class Grid:
         quote (str): The quote that will be placed in the grid.
         size (int): The size of the grid. Set to be 15x15.
     """
-    def __init__(self, quote: str):
-        self.quote = ananya(quote)
-        self.size = 15
 
-        # print(self.get_quote())
+    def __init__(self, quote: str, size: int = 15):
+        self.quote = quote
+        self.size = size
+
         self.parsed_quote = self.parse_quote()
 
         # Create grid with empty cells
-        self.grid = [[Cell(row, col) for col in range(self.size)] for row in range(self.size)]
+        self.grid = [
+            [Cell(row, col) for col in range(self.size)] 
+            for row in range(self.size)
+        ]
+        
         self.starting_cell = self.starting_spot()
         # print(f'Starting Position: {self.starting_cell.get_position()}')
         self.insert(self.starting_cell)

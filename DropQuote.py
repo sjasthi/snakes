@@ -2,8 +2,8 @@ import random
 
 
 class DropQuote:
-    def __init__(self, quote: str):
-        self.width = 20
+    def __init__(self, quote: str, width: int = 20):
+        self.width = width
         self.quote = quote.upper()
         self.columns = [self.letters_in_column(i) for i in range(self.width)]
 
