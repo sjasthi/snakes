@@ -9,3 +9,7 @@ env/
 # Mac/Windows Junk Files
 .DS_Store
 Thumbs.db
+
+cache_snakes_easy.json
+cache_snakes_normal.json
+cache_snakes_hard.json

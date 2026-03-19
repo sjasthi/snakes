@@ -64,3 +64,10 @@ function replaceQuote() {
         location.reload();
     });
 }
+
+function regenerate() {
+    fetch("/clear-cache", {
+        method: "POST"
+    })
+    .then(() => location.reload());
+}

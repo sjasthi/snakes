@@ -3,31 +3,107 @@
 {% block title %}Snakes{% endblock %}
 
 {% block content %}
-     <div class="text-center mb-4 no-print">
-        <button class="btn btn-dark btn-sm" onclick="window.print()">
+
+<!-- ── Preferences Bar ── -->
+<div class="pref-bar no-print mb-4">
+    <form method="GET" action="{{ url_for('index') }}"
+          class="d-flex flex-wrap align-items-center gap-3">
+
+        <!-- Difficulty -->
+        <div class="pref-group">
+            <label class="pref-label">Grid Size</label>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="difficulty"
+                       id="diff-easy" value="easy"
+                       {% if difficulty == 'easy' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-success btn-sm" for="diff-easy">
+                    🟢 Easy (10×10)
+                </label>
+
+                <input type="radio" class="btn-check" name="difficulty"
+                       id="diff-normal" value="normal"
+                       {% if difficulty == 'normal' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-primary btn-sm" for="diff-normal">
+                    🔵 Normal (15×15)
+                </label>
+
+                <input type="radio" class="btn-check" name="difficulty"
+                       id="diff-hard" value="hard"
+                       {% if difficulty == 'hard' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-danger btn-sm" for="diff-hard">
+                    🔴 Hard (20×20)
+                </label>
+            </div>
+        </div>
+
+        <!-- Show Solution -->
+        <div class="pref-group">
+            <label class="pref-label">Solution</label>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="show_solution"
+                       id="sol-hide" value="false"
+                       {% if not show_solution %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-secondary btn-sm" for="sol-hide">
+                    Hidden
+                </label>
+
+                <input type="radio" class="btn-check" name="show_solution"
+                       id="sol-show" value="true"
+                       {% if show_solution %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-warning btn-sm" for="sol-show">
+                    Revealed
+                </label>
+            </div>
+        </div>
+
+        <!-- Showing the number of quotes generated -->
+        <div class="pref-info">
+            <span class="badge bg-secondary">
+                Showing {{ shown_quotes }} of {{ total_quotes }} quotes
+            </span>
+        </div>
+
+        <button class="btn btn-outline-secondary btn-sm no-print" onclick="regenerate()">
+            🔄 Regenerate">
+        </button>
+
+        <!-- Print -->
+        <button type="button" class="btn btn-dark btn-sm ms-auto no-print"
+                onclick="window.print()">
             🖨️ Print PDF
         </button>
-    </div>
 
-    {% for puzzle in all_puzzles %}
-    <div class="game-container puzzle-page mb-5">
-        <h1>Puzzle #{{loop.index }}</h1>
-        <p>Find the hidden quote below.</p>
-        <p>Quote: <strong>{{ puzzle.quote }}</strong></p>
+    </form>
+</div>
 
-        <div class="grid-container" id="grid-{{ loop.index }}">
-            {% for row_idx in range(puzzle.grid|length) %}
-                {% for col_idx in range(puzzle.grid[row_idx]|length) %}
-                    <div class="cell {{ 'disabled' if puzzle.grid[row_idx][col_idx] == '-' else '' }}"
-                          data-row="{{ row_idx }}"
-                          data-col="{{ col_idx }}"
-                          data-letter="{{ puzzle.grid[row_idx][col_idx] }}">
-                        {{ puzzle.grid[row_idx][col_idx] }}
-                    </div>
-                {% endfor %}
+<!-- ── Puzzles ── -->
+{% for puzzle in all_puzzles %}
+<div class="game-container puzzle-page mb-5">
+
+    <h1>Puzzle #{{ loop.index }}</h1>
+    <p>Find the hidden quote — letters connect like a snake.</p>
+    <p>Quote: <strong>{{ puzzle.quote }}</strong></p>
+
+    <div class="grid-container"
+         style="--grid-cols: {{ puzzle.size }}">
+        {% for row_idx in range(puzzle.grid|length) %}
+            {% for col_idx in range(puzzle.grid[row_idx]|length) %}
+                <div class="cell"
+                     data-row="{{ row_idx }}"
+                     data-col="{{ col_idx }}"
+                     data-letter="{{ puzzle.grid[row_idx][col_idx] }}">
+                    {{ puzzle.grid[row_idx][col_idx] }}
+                </div>
             {% endfor %}
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
+</div>
+{% endfor %}
 
 {% endblock %}

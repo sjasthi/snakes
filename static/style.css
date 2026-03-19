@@ -56,7 +56,7 @@ body {
 /* Grid */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(15, 36px);
+    grid-template-columns: repeat(var(--grid-cols, 15), 36px);
     gap: 6px;
     margin: 20px auto;
     width: fit-content;
@@ -273,4 +273,62 @@ body {
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
     }
+}
+
+/* ── Preferences Bar ────────────────────────────────────────── */
+
+.pref-bar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.pref-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pref-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    margin: 0;
+}
+
+.pref-info {
+    display: flex;
+    align-items: flex-end;
+}
+
+/* ── Drop Quote solution reveal ─────────────────────────────── */
+
+.dq-solution {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 12px;
+    padding: 8px 16px;
+    background: #fffbe6;
+    border: 1px dashed #f0c040;
+    border-radius: 6px;
+}
+
+.dq-revealed {
+    border-bottom: 2px solid #f7da64;
+    background: #fffbe6;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* ── Print: hide preference bar ────────────────────────────── */
+@media print {
+    .pref-bar   { display: none !important; }
+    .dq-solution { display: none !important; }
+    .no-print   { display: none !important; }
 }
