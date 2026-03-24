@@ -17,17 +17,21 @@ def rewrite_text_file(q):
         for quote in q:
             f.write(f'{quote}\n')
 
+
 def add_quote(q, add):
     q.append(add)
     rewrite_text_file(q)
+
 
 def remove_quote(q, q_index):
     del q[q_index - 1]
     rewrite_text_file(q)
 
+
 def replace_quote(q, q_index, string):
     q[q_index - 1] = string
     rewrite_text_file(q)
+
 
 def filter_quotes_by_grid(quotes, grid_size):
     # For 10x10, only allow quotes with 30 letters or fewer (safe limit)
@@ -42,13 +46,13 @@ def filter_quotes_by_grid(quotes, grid_size):
 
 @app.route('/')
 def index():
-    difficulty    = request.args.get('difficulty', 'normal')
+    difficulty = request.args.get('difficulty', 'normal')
     show_solution = request.args.get('show_solution', 'false') == 'true'
 
     if difficulty not in ('easy', 'normal', 'hard'):
         difficulty = 'normal'
 
-    size_map  = {'easy': 10, 'normal': 15, 'hard': 20}
+    size_map = {'easy': 10, 'normal': 15, 'hard': 20}
     grid_size = size_map[difficulty]
 
     cache_file = f'cache_snakes_{difficulty}.json'
@@ -57,9 +61,9 @@ def index():
         with open(cache_file, 'r') as f:
             all_puzzles = json.load(f)
     else:
-        quotes          = load_quotes("quotes.txt")
+        quotes = load_quotes("quotes.txt")
         filtered_quotes = filter_quotes_by_grid(quotes, grid_size)
-        all_puzzles     = []
+        all_puzzles = []
 
         for q in filtered_quotes:
             puzzle = Grid(q, size=grid_size)
@@ -91,7 +95,7 @@ def load_quotes_page():
 
 @app.route('/dropquote')
 def dropquote():
-    col_width     = request.args.get('col_width', '20')
+    col_width = request.args.get('col_width', '20')
     show_solution = request.args.get('show_solution', 'false') == 'true'
 
     valid_widths = [10, 15, 20, 25]
@@ -102,13 +106,13 @@ def dropquote():
     except ValueError:
         col_width = 20
 
-    quotes      = load_quotes("quotes.txt")
+    quotes = load_quotes("quotes.txt")
     all_puzzles = []
 
     for q in quotes:
-        dq             = DropQuote(q, width=col_width)
-        rows           = dq.split_quote()
-        columns        = dq.columns
+        dq = DropQuote(q, width=col_width)
+        rows = dq.split_quote()
+        columns = dq.columns
         max_col_height = max(len(c) for c in columns) if any(columns) else 0
 
         all_puzzles.append({
@@ -137,6 +141,7 @@ def add():
         return jsonify({"error": "Empty quote"}), 400
     q = load_quotes("quotes.txt")
     add_quote(q, quote)
+
     return jsonify({"message": "Quote added", "quote": quote})
 
 
@@ -148,6 +153,7 @@ def remove():
     if not index or index < 1 or index > len(q):
         return jsonify({"error": "Invalid index"}), 400
     remove_quote(q, index)
+
     return jsonify({"message": "Quote removed", "index": index})
 
 
