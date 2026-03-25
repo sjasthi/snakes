@@ -1,9 +1,9 @@
 # 🐍 Snakes — A Multi-Lingual Puzzle Generator
 
-**Course:** ICS 499 — Software Engineering & Capstone Project
-**Professor:** Siva Jasthi
-**Semester:** Spring 2026
-**Authors:** Nathan Vo · Rocky Vang
+**Course:** ICS 499 — Software Engineering & Capstone Project  
+**Professor:** Siva Jasthi  
+**Semester:** Spring 2026  
+**Authors:** Nathan Vo · Rocky Vang  
 
 ---
 
