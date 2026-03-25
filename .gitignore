@@ -5,6 +5,8 @@ __pycache__/
 # Virtual Environments (so you don't push thousands of setup files)
 venv/
 env/
+.env
+.venv
 
 # Mac/Windows Junk Files
 .DS_Store
@@ -13,3 +15,5 @@ Thumbs.db
 cache_snakes_easy.json
 cache_snakes_normal.json
 cache_snakes_hard.json
+
+static/img/rebus/

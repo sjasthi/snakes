@@ -1,75 +1,104 @@
-import os
 import random
+import requests
+import os
+from dotenv import load_dotenv
+from word_bank import WORD_BANK
 
+load_dotenv()
 
-class Rebus:
-    def __init__(self, word):
-        self.word = word
-        self.results = []
-        self.WORD_BANK = {
-            'a': ["apple", "astronaut", "ant"],
-            'b': ["banana", "boat", "bear"],
-            'c': ["cat", "castle", "candle"],
-            'd': ["dog", "dragon", "desk"],
-            'e': ["egg", "eagle", "engine"],
-            'f': ["fish", "forest", "fork"],
-            'g': ["goat", "garden", "ghost"],
-            'h': ["house", "horse", "hat"],
-            'i': ["ice", "island", "igloo"],
-            'j': ["jungle", "jacket", "jar"],
-            'k': ["kite", "kangaroo", "key"],
-            'l': ["lion", "lamp", "leaf"],
-            'm': ["music", "mountain", "mouse"],
-            'n': ["nest", "ninja", "nose"],
-            'o': ["orc", "orange", "ocean"],
-            'p': ["pizza", "piano", "pumpkin"],
-            'q': ["queen", "quilt", "quail"],
-            'r': ["robot", "river", "rose"],
-            's': ["snake", "sun", "shark"],
-            't': ["tower", "tiger", "tree"],
-            'u': ["umbrella", "unicorn", "urn"],
-            'v': ["vase", "violin", "village"],
-            'w': ["whale", "window", "wolf"],
-            'x': ["xylophone", "x-ray"],
-            'y': ["yacht", "yak", "yarn"],
-            'z': ["zebra", "zoo", "zipper"]
+HF_TOKEN = os.getenv("HF_TOKEN")
+IMAGE_FOLDER = "static/img/rebus"
+
+def generate_image(word: str):
+    os.makedirs(IMAGE_FOLDER, exist_ok=True)
+    filepath = os.path.join(IMAGE_FOLDER, f"{word.lower()}.png")
+
+    if os.path.exists(filepath):
+        return filepath
+
+    API_URL = "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
+    headers = {
+        "Authorization": f"Bearer {HF_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "inputs": f"a simple clear image of a {word.lower()}, white background, no text",
+        "parameters": {
+            "num_inference_steps": 4,
+            "guidance_scale": 0.0
         }
+    }
 
-        self.play_game()
+    response = requests.post(API_URL, headers=headers, json=payload)
 
-    def generate_word(self, letter):
-        return random.choice(self.WORD_BANK[letter.lower()])
-
-    def count_matches(self, word, original):
-        return len(set(word.lower()) & set(self.word.lower()))
-
-    def get_image(self, word):
-        folder = "static/images"
-        possible_exts = [".png", ".jpg", ".jpeg", ".webp", ".gif"]
-
-        for ext in possible_exts:
-            path = os.path.join(folder, word + ext)
-            if os.path.exists(path):
-                return "images/" + word + ext
-
+    if response.status_code == 200:
+        with open(filepath, "wb") as f:
+            f.write(response.content)
+        print(f"Image saved for {word}")
+        return filepath
+    else:
+        print(f"Failed for {word}: {response.status_code} — {response.text}")
+        print(f"URL used: {API_URL}")
         return None
 
-    def play_game(self):
-        total_letters = len(self.word)
+class Rebus:
+    """
+    Given a target word, find one clue word per letter.
+    Each clue word contains that letter at a specific position.
+    """
 
-        for letter in self.word:
-            generated = self.generate_word(letter)
-            matches = self.count_matches(generated, self.word)
-            image_file = self.get_image(generated)
+    def __init__(self, target_word: str):
+        self.target_word = target_word.upper().strip()
+        self.clues = self.generate_clues()
 
-            self.results.append({
-                "image": image_file,
-                "matches": matches,
-                "total": total_letters
-            })
+    def generate_clues(self):
+        """
+        For each letter in the target word, find a clue word
+        that contains that letter.
+        Returns a list of dicts with clue info.
+        """
+        clues = []
+        for letter in self.target_word:
+            clue = self.find_clue_word(letter)
+            clues.append(clue)
+        return clues
+
+    def find_clue_word(self, letter: str):
+        """
+        Search the word bank for words containing the given letter.
+        Pick one randomly and return the word, position, and length.
+        """
+        candidates = []
+        for word in WORD_BANK:
+            for i, ch in enumerate(word.upper()):
+                if ch == letter.upper():
+                    candidates.append({
+                        "clue_word": word,
+                        "letter": letter.upper(),
+                        "position": i + 1,       # 1-based position
+                        "length": len(word),
+                        "hint": f"{i + 1}/{len(word)}"
+                    })
+
+        if candidates:
+            return random.choice(candidates)
+        else:
+            # Fallback if no word found for that letter
+            return {
+                "clue_word": None,
+                "letter": letter.upper(),
+                "position": None,
+                "length": None,
+                "hint": "?"
+            }
+
+    def to_dict(self):
+        return {
+            "target_word": self.target_word,
+            "clues": self.clues
+        }
 
 
-if __name__ == "__main__":
-    p = Rebus('octopus')
-    for i in p.results:
-        print(f"{i.get('generated')} {i.get('matches')}/{i.get('total')}")
+if __name__ == '__main__':
+    result = generate_image("CAT")
+    print(result)
