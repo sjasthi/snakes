@@ -2,7 +2,7 @@ import os
 import random
 
 
-class Puzzle3:
+class Rebus:
     def __init__(self, word):
         self.word = word
         self.results = []
@@ -70,6 +70,6 @@ class Puzzle3:
 
 
 if __name__ == "__main__":
-    p = Puzzle3('octopus')
+    p = Rebus('octopus')
     for i in p.results:
         print(f"{i.get('generated')} {i.get('matches')}/{i.get('total')}")
