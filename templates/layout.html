@@ -16,6 +16,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="static/img/logo.png">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -23,8 +24,8 @@
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            Logo
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="static/img/nav-bar.png" alt="Logo">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
