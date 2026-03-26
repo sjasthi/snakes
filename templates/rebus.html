@@ -1,18 +1,64 @@
 {% extends "layout.html" %}
 
-{% block title %}Rebus{% endblock %}
+{% block title %}Rebus Puzzle{% endblock %}
 
 {% block content %}
 
-<h1>Rebus</h1>
+<div class="mb-4 no-print">
+    <form method="POST" action="{{ url_for('rebus') }}" enctype="multipart/form-data">
 
-{% for item in puzzle.results %}
-    <div>
-        {% if item.image %}
-            <img src="{{ url_for('static', filename=item.image) }}" width="150">
-        {% endif %}
-        <p>{{ item.matches }}/{{ item.total }}</p>
+        <!-- Single word -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Enter a word</label>
+            <div class="input-group">
+                <input type="text" name="word" class="form-control"
+                       placeholder="e.g. METRO">
+                <button type="submit" class="btn btn-primary">Generate</button>
+            </div>
+        </div>
+
+        <!-- File upload -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Or upload a word list (.txt)</label>
+            <div class="input-group">
+                <input type="file" name="wordFile" class="form-control" accept=".txt">
+                <button type="submit" class="btn btn-secondary">Upload & Generate</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<!-- Puzzles -->
+{% for puzzle in puzzles %}
+<div class="rebus-puzzle puzzle-page mb-5">
+
+    <h2 class="text-center mb-3">
+        Rebus Puzzle — {{ puzzle.target_word|length }} letters
+    </h2>
+
+    <div class="rebus-clues">
+        {% for clue in puzzle.clues %}
+        <div class="rebus-clue">
+            {% if clue.image_url %}
+                <img src="{{ url_for('static', filename=clue.image_url) }}"
+                     alt="{{ clue.clue_word }}">
+            {% else %}
+                <div class="rebus-no-image">?</div>
+            {% endif %}
+            <div class="rebus-hint">{{ clue.hint }}</div>
+        </div>
+        {% endfor %}
     </div>
+
+    <!-- Answer blanks -->
+    <div class="rebus-answer mt-3">
+        {% for letter in puzzle.target_word %}
+        <div class="rebus-blank"></div>
+        {% endfor %}
+    </div>
+
+</div>
 {% endfor %}
 
 {% endblock %}

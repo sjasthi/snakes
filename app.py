@@ -1,13 +1,17 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from Grid import Grid
 from DropQuote import DropQuote
-from Rebus import Rebus
+from Rebus import Rebus, generate_image
 from main import load_quotes
+from dotenv import load_dotenv
 import re
 import json
 import os
 
 app = Flask(__name__)
+
+load_dotenv()  # Load environment variables from .env file
+app.secret_key = os.getenv("SECRET_KEY")
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -177,11 +181,37 @@ def clear_cache():
             os.remove(f)
     return jsonify({"message": "Cache cleared"})
 
-@app.route("/rebus")
+@app.route('/rebus', methods=['GET', 'POST'])
 def rebus():
-    word = "knife"
-    p = Rebus(word)
-    return render_template("rebus.html", puzzle=p)
+    puzzles = []
+
+    if request.method == 'POST':
+        words = []
+
+        # Single word input
+        single_word = request.form.get('word', '').strip().upper()
+        if single_word:
+            words = [single_word]
+
+        # File upload input
+        file = request.files.get('wordFile')
+        if file and file.filename:
+            content = file.read().decode('utf-8', errors='ignore')
+            words = [w.strip().upper() for w in content.splitlines() if w.strip()]
+
+        for word in words:
+            r = Rebus(word)
+            puzzle = r.to_dict()
+
+            # Generate image for each clue word
+            for clue in puzzle['clues']:
+                if clue['clue_word']:
+                    img_path = generate_image(clue['clue_word'])
+                    clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+
+            puzzles.append(puzzle)
+
+    return render_template("rebus.html", puzzles=puzzles)
 
 
 if __name__ == '__main__':
