@@ -1,7 +1,8 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from Grid import Grid
 from DropQuote import DropQuote
-from Rebus import Rebus, generate_image
+# from Rebus import Rebus, generate_image
+from RebusPixabay import RebusPixabay, generate_image
 from main import load_quotes
 from dotenv import load_dotenv
 import re
@@ -113,7 +114,7 @@ def dropquote():
     quotes = load_quotes("quotes.txt")
     all_puzzles = []
 
-    for q in quotes:
+    for q in quotes[:2]:
         dq = DropQuote(q, width=col_width)
         rows = dq.split_quote()
         columns = dq.columns
@@ -200,7 +201,8 @@ def rebus():
             words = [w.strip().upper() for w in content.splitlines() if w.strip()]
 
         for word in words:
-            r = Rebus(word)
+            # r = Rebus(word)
+            r = RebusPixabay(word)
             puzzle = r.to_dict()
 
             # Generate image for each clue word
