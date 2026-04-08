@@ -10,7 +10,7 @@ PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY")
 IMAGE_FOLDER = "static/img/rebus"
 
 
-def generate_image(word: str):
+def generate_image_pixabay(word: str):
     os.makedirs(IMAGE_FOLDER, exist_ok=True)
     filepath = os.path.join(IMAGE_FOLDER, f"{word.lower()}.png")
 
@@ -50,7 +50,7 @@ def generate_image(word: str):
         if img_response.status_code == 200:
             with open(filepath, "wb") as f:
                 f.write(img_response.content)
-            print(f"Image saved for {word}")
+            print(f"Image saved for {word} Pixabay")
             return filepath
         else:
             print(f"Failed to download image: {img_response.status_code}")
@@ -109,5 +109,5 @@ class RebusPixabay:
 
 
 if __name__ == '__main__':
-    result = generate_image("dog")
+    result = generate_image_pixabay("dog")
     print(result)

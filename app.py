@@ -1,8 +1,8 @@
-from flask import Flask, render_template, jsonify, request, redirect
+from flask import Flask, render_template, jsonify, request, session, redirect
 from Grid import Grid
 from DropQuote import DropQuote
-# from Rebus import Rebus, generate_image
-from RebusPixabay import RebusPixabay, generate_image
+from Rebus import Rebus, generate_image
+from RebusPixabay import RebusPixabay, generate_image_pixabay
 from main import load_quotes
 from dotenv import load_dotenv
 import re
@@ -136,6 +136,66 @@ def dropquote():
     )
 
 
+@app.route('/rebus', methods=['GET', 'POST'])
+def rebus():
+    puzzles = []
+
+    rebus_type = session.get('rebus_type', 'pixabay')  # default if not set
+
+    if request.method == 'POST':
+        # get form data
+        selected_type = request.form.get('rebus_type')
+        if selected_type in ('pixabay', 'hugging_face'):
+            session['rebus_type'] = selected_type
+            rebus_type = selected_type
+
+        # then process words as usual
+        words = []
+        single_word = request.form.get('word', '').strip().upper()
+        if single_word:
+            words = [single_word]
+
+        file = request.files.get('wordFile')
+        if file and file.filename:
+            content = file.read().decode('utf-8', errors='ignore')
+            words = [w.strip().upper() for w in content.splitlines() if w.strip()]
+
+        for word in words:
+            if rebus_type == 'pixabay':
+                r = RebusPixabay(word)
+            else:
+                r = Rebus(word)  # HuggingFace
+            puzzle = r.to_dict()
+
+            for clue in puzzle['clues']:
+                if clue['clue_word']:
+                    if rebus_type == 'pixabay':
+                        img_path = generate_image_pixabay(clue['clue_word'])
+                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                    elif rebus_type == 'hugging_face':
+                        img_path = generate_image(clue['clue_word'])
+                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                    else:
+                        clue['image_url'] = None
+
+            puzzles.append(puzzle)
+
+    return render_template("rebus.html", puzzles=puzzles, rebus_type=rebus_type)
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    if request.method == 'POST':
+        rebus_type = request.form.get('rebus_type', 'pixabay')
+        session['rebus_type'] = rebus_type
+        return redirect(request.referrer or '/')
+
+    # Default if not set yet
+    rebus_type = session.get('rebus_type', 'pixabay')
+
+    return render_template('settings.html', rebus_type=rebus_type)
+
+
 # ── CRUD ──────────────────────────────────────────────────────────────────────
 
 @app.route("/quotes/add", methods=["POST"])
@@ -181,39 +241,6 @@ def clear_cache():
         if os.path.exists(f):
             os.remove(f)
     return jsonify({"message": "Cache cleared"})
-
-@app.route('/rebus', methods=['GET', 'POST'])
-def rebus():
-    puzzles = []
-
-    if request.method == 'POST':
-        words = []
-
-        # Single word input
-        single_word = request.form.get('word', '').strip().upper()
-        if single_word:
-            words = [single_word]
-
-        # File upload input
-        file = request.files.get('wordFile')
-        if file and file.filename:
-            content = file.read().decode('utf-8', errors='ignore')
-            words = [w.strip().upper() for w in content.splitlines() if w.strip()]
-
-        for word in words:
-            # r = Rebus(word)
-            r = RebusPixabay(word)
-            puzzle = r.to_dict()
-
-            # Generate image for each clue word
-            for clue in puzzle['clues']:
-                if clue['clue_word']:
-                    img_path = generate_image(clue['clue_word'])
-                    clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
-
-            puzzles.append(puzzle)
-
-    return render_template("rebus.html", puzzles=puzzles)
 
 
 if __name__ == '__main__':

@@ -9,6 +9,9 @@
 
         <!-- Single word -->
         <div class="mb-3">
+            <div>
+                <strong>Current Rebus Type:</strong> {{ 'Pixabay Rebus' if rebus_type == 'pixabay' else 'HuggingFace Rebus' }}
+            </div>
             <label class="form-label fw-bold">Enter a word</label>
             <div class="input-group">
                 <input type="text" name="word" class="form-control"
