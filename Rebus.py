@@ -34,7 +34,7 @@ def generate_image(word: str):
     if response.status_code == 200:
         with open(filepath, "wb") as f:
             f.write(response.content)
-        print(f"Image saved for {word}")
+        print(f"Image saved for {word} HuggingFace")
         return filepath
     else:
         print(f"Failed for {word}: {response.status_code} — {response.text}")

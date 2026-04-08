@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, request, session, redirect
 from Grid import Grid
 from DropQuote import DropQuote
 from Rebus import Rebus, generate_image
-from RebusPixabay import RebusPixabay, generate_image
+from RebusPixabay import RebusPixabay, generate_image_pixabay
 from main import load_quotes
 from dotenv import load_dotenv
 import re
@@ -170,6 +170,9 @@ def rebus():
             for clue in puzzle['clues']:
                 if clue['clue_word']:
                     if rebus_type == 'pixabay':
+                        img_path = generate_image_pixabay(clue['clue_word'])
+                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                    elif rebus_type == 'hugging_face':
                         img_path = generate_image(clue['clue_word'])
                         clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
                     else:
