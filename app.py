@@ -5,7 +5,6 @@ from core.DropQuote import DropQuote
 from core.Rebus import Rebus, generate_image
 from core.RebusPixabay import RebusPixabay, generate_image_pixabay
 from dotenv import load_dotenv
-import re
 import json
 import os
 
@@ -45,7 +44,8 @@ def index():
             all_puzzles.append({
                 "quote": q,
                 "grid": [[str(cell) for cell in row] for row in puzzle.grid],
-                "size": puzzle.size
+                "size": puzzle.size,
+                "solution_path": puzzle.solution_path
             })
 
         # Ensure the folder exists before writing it -> Make directory(if its exist, ignore)

@@ -98,10 +98,11 @@
          style="--grid-cols: {{ puzzle.size }}">
         {% for row_idx in range(puzzle.grid|length) %}
             {% for col_idx in range(puzzle.grid[row_idx]|length) %}
-                <div class="cell"
-                     data-row="{{ row_idx }}"
-                     data-col="{{ col_idx }}"
-                     data-letter="{{ puzzle.grid[row_idx][col_idx] }}">
+                {% set is_solution = [row_idx, col_idx] in puzzle.solution_path %}
+                <div class="cell {% if show_solution and is_solution %}found{% endif %}"
+                    data-row="{{ row_idx }}"
+                    data-col="{{ col_idx }}"
+                    data-letter="{{ puzzle.grid[row_idx][col_idx] }}">
                     {{ puzzle.grid[row_idx][col_idx] }}
                 </div>
             {% endfor %}
