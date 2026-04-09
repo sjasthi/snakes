@@ -1,0 +1,135 @@
+
+/* ── Drop Quote ──────────────────────────────────────────── */
+
+.dq-page {
+    margin: 40px auto;
+    padding: 32px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.dq-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+}
+
+.dq-instructions {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.dq-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dq-letter-bank {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.dq-col-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.dq-drop-cell {
+    width: 30px;
+    height: 30px;
+    background-color: #d0e8ff;
+    border: 1px solid #90bce8;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.dq-empty-spacer {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.dq-arrow-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    margin: 4px 0;
+}
+
+.dq-arrow {
+    width: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+.dq-answer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dq-answer-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.dq-answer-cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.dq-blank {
+    border-bottom: 2px solid #333;
+    background-color: transparent;
+}
+
+.dq-space {
+    background-color: #333;
+    border-radius: 2px;
+}
+
+.dq-punct {
+    font-size: 16px;
+    color: #333;
+}
+
+
+/* ── Drop Quote solution reveal ─────────────────────────────── */
+
+.dq-solution {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 12px;
+    padding: 8px 16px;
+    background: #fffbe6;
+    border: 1px dashed #f0c040;
+    border-radius: 6px;
+}
+
+.dq-revealed {
+    border-bottom: 2px solid #f7da64;
+    background: #fffbe6;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 14px;
+}

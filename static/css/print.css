@@ -1,0 +1,70 @@
+
+/* ── Print ───────────────────────────────────────────────── */
+
+@page {
+    margin: 1cm;
+    size: A4 portrait;
+}
+
+@media print {
+    .puzzle-page {
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .navbar, .controls, #message, .no-print {
+        display: none !important;
+    }
+
+    html, body {
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    .site-content {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+    }
+
+    .game-container {
+        background-color: white !important;
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        padding: 10px !important;
+        width: 100% !important;
+        max-width: 680px !important;
+    }
+
+    .grid-container {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .cell {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .dq-page {
+        box-shadow: none;
+        margin: 0 auto;
+        padding: 10px;
+    }
+
+    .dq-drop-cell,
+    .dq-space {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+
+/* ── Print: hide preference bar ────────────────────────────── */
+@media print {
+    .pref-bar   { display: none !important; }
+    .dq-solution { display: none !important; }
+    .no-print   { display: none !important; }
+}

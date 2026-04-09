@@ -2,6 +2,10 @@
 
 {% block title %}Snakes{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/snake.css') }}">
+{% endblock %}
+
 {% block content %}
 
 <!-- ── Preferences Bar ── -->

@@ -1,0 +1,65 @@
+
+/* ── Rebus Puzzle ────────────────────────────────────────── */
+.rebus-puzzle {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.rebus-clues {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.rebus-clue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.rebus-clue img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+}
+
+.rebus-no-image {
+    width: 120px;
+    height: 120px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #aaa;
+}
+
+.rebus-hint {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #555;
+    background: #f0f0f0;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.rebus-answer {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.rebus-blank {
+    width: 36px;
+    height: 36px;
+    border-bottom: 3px solid #333;
+}

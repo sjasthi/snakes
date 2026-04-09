@@ -1,0 +1,77 @@
+/* ── Snake puzzle ────────────────────────────────────────── */
+
+.game-container {
+    text-align: center;
+    margin: 40px auto;
+    padding: 32px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.game-container h1 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.game-container p {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.game-container strong {
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+/* Grid */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols, 15), 36px);
+    gap: 6px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+.cell {
+    width: 36px;
+    height: 36px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s, transform 0.1s;
+}
+
+.cell:hover {
+    background-color: #dde8ff;
+    transform: scale(1.08);
+}
+
+.cell.selected {
+    background-color: #b8d0ff;
+    color: #1a1a1a;
+}
+
+.cell.found {
+    background-color: #f7da64;
+    color: #1a1a1a;
+    cursor: default;
+}
+
+.cell.disabled {
+    background-color: #f0f0f0;
+    color: #aaa;
+    cursor: default;
+}
