@@ -111,23 +111,55 @@ def dropquote():
     except ValueError:
         col_width = 20
 
-    quotes = load_quotes("quotes.txt")
-    all_puzzles = []
+    cache_file = f'cache_dropquote_w{col_width}.json'
 
-    for q in quotes[:2]:
-        dq = DropQuote(q, width=col_width)
-        rows = dq.split_quote()
-        columns = dq.columns
-        max_col_height = max(len(c) for c in columns) if any(columns) else 0
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as f:
+            all_puzzles = json.load(f)
+    else: 
+        quotes = load_quotes("quotes.txt")
+        all_puzzles = []
 
-        all_puzzles.append({
-            "quote":          q,
-            "rows":           rows,
-            "columns":        columns,
-            "max_col_height": max_col_height,
-            "col_width":      col_width
-        })
+        for q in quotes:
+            dq             = DropQuote(q, width=col_width)
+            rows           = dq.split_quote()
+            columns        = dq.columns
+            max_col_height = max(len(c) for c in columns) if any(columns) else 0
 
+            # Build answer rows — same structure but show actual letters
+            answer_rows = []
+            for row in rows:
+                answer_row = []
+                for char in row:
+                    if char == '_':
+                        answer_row.append('LETTER')  # placeholder, we'll fill below
+                    else:
+                        answer_row.append(char)
+                answer_rows.append(answer_row)
+
+            # Fill in the actual letters from the quote
+            letter_index = 0
+            quote_upper  = q.upper()
+            for r_idx, row in enumerate(rows):
+                for c_idx, char in enumerate(row):
+                    if char == '_':
+                        # Find the next letter in the original quote
+                        while letter_index < len(quote_upper) and not quote_upper[letter_index].isalnum():
+                            letter_index += 1
+                        if letter_index < len(quote_upper):
+                            answer_rows[r_idx][c_idx] = quote_upper[letter_index]
+                            letter_index += 1
+
+            all_puzzles.append({
+                "quote":          q,
+                "rows":           rows,
+                "answer_rows":    answer_rows,   # ← new
+                "columns":        columns,
+                "max_col_height": max_col_height,
+                "col_width":      col_width
+            })
+        with open(cache_file, 'w') as f:
+            json.dump(all_puzzles, f)
     return render_template(
         "dropquote.html",
         all_puzzles=all_puzzles,
@@ -237,7 +269,11 @@ def replace():
 def clear_cache():
     for f in ['cache_snakes_easy.json',
               'cache_snakes_normal.json',
-              'cache_snakes_hard.json']:
+              'cache_snakes_hard.json',
+              'cache_dropquote_w10.json',
+              'cache_dropquote_w15.json',
+              'cache_dropquote_w20.json',
+              'cache_dropquote_w25.json']:
         if os.path.exists(f):
             os.remove(f)
     return jsonify({"message": "Cache cleared"})

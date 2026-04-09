@@ -16,6 +16,10 @@ body {
 
 /* ── Navbar ──────────────────────────────────────────────── */
 
+.navbar-brand img{
+    height: 40px;
+}
+
 .navbar .container-fluid {
     width: 80%;
     max-width: 1200px;
