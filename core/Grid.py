@@ -2,7 +2,7 @@ import random
 import requests
 import unicodedata
 import string
-from Cell import Cell
+from core.Cell import Cell
 
 
 def ananya(quote: str) -> list[str]:

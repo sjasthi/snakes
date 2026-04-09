@@ -1,10 +1,9 @@
 from flask import Flask, render_template, jsonify, request, session, redirect
-from helpers import (add_quote, remove_quote, replace_quote, filter_quotes_by_grid)
-from Grid import Grid
-from DropQuote import DropQuote
-from Rebus import Rebus, generate_image
-from RebusPixabay import RebusPixabay, generate_image_pixabay
-from main import load_quotes
+from core.helpers import (add_quote, load_quotes, remove_quote, replace_quote, filter_quotes_by_grid)
+from core.Grid import Grid
+from core.DropQuote import DropQuote
+from core.Rebus import Rebus, generate_image
+from core.RebusPixabay import RebusPixabay, generate_image_pixabay
 from dotenv import load_dotenv
 import re
 import json
