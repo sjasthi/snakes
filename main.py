@@ -1,7 +1,7 @@
 import Grid
 
 
-def load_quotes(filepath="quotes.txt") -> list:
+def load_quotes(filepath="data/quotes.txt") -> list:
     """Read quotes from a text file (one quote per line) and return a list."""
     quotes = []
     with open(filepath, "r", encoding="utf-8") as f:
@@ -35,11 +35,11 @@ def generate_puzzles(quotes: list[str]) -> list[Grid]:
 
 
 if __name__ == '__main__':
-    quotes = load_quotes("quotes.txt")
+    quotes = load_quotes("data/quotes.txt")
     # print_quotes(quotes=quotes)
 
     puzzles = generate_puzzles(quotes=quotes)
     for puzzle in puzzles:
-        print(puzzle.get_quote())
+        print(puzzle.quote)
         puzzle.print_grid()
         print('\n')

@@ -2,7 +2,7 @@ import random
 import requests
 import os
 from dotenv import load_dotenv
-from word_bank import WORD_BANK
+from data.word_bank import WORD_BANK
 
 load_dotenv()
 
