@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request, session, redirect
+from helpers import (add_quote, remove_quote, replace_quote, filter_quotes_by_grid)
 from Grid import Grid
 from DropQuote import DropQuote
 from Rebus import Rebus, generate_image
@@ -15,38 +16,6 @@ load_dotenv()  # Load environment variables from .env file
 app.secret_key = os.getenv("SECRET_KEY")
 QUOTE_FILE = "data/quotes.txt"
 CACHE_DIR = "cache"
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
-
-def rewrite_text_file(q):
-    with open(QUOTE_FILE, 'w', encoding='utf-8') as f:
-        for quote in q:
-            f.write(f'{quote}\n')
-
-
-def add_quote(q, add):
-    q.append(add)
-    rewrite_text_file(q)
-
-
-def remove_quote(q, q_index):
-    del q[q_index - 1]
-    rewrite_text_file(q)
-
-
-def replace_quote(q, q_index, string):
-    q[q_index - 1] = string
-    rewrite_text_file(q)
-
-
-def filter_quotes_by_grid(quotes, grid_size):
-    # For 10x10, only allow quotes with 30 letters or fewer (safe limit)
-    # For 15x15 and 20x20, all quotes fit fine
-    limits = {10: 30, 15: 999, 20: 999}
-    max_letters = limits.get(grid_size, 999)
-    return [q for q in quotes
-            if len(re.sub(r'[^a-zA-Z]', '', q)) <= max_letters]
-
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -159,7 +128,7 @@ def dropquote():
             all_puzzles.append({
                 "quote":          q,
                 "rows":           rows,
-                "answer_rows":    answer_rows,   # ← new
+                "answer_rows":    answer_rows, 
                 "columns":        columns,
                 "max_col_height": max_col_height,
                 "col_width":      col_width
@@ -277,17 +246,12 @@ def replace():
 
 @app.route('/clear-cache', methods=['POST'])
 def clear_cache():
-    for f in ['cache_snakes_easy.json',
-              'cache_snakes_normal.json',
-              'cache_snakes_hard.json',
-              'cache_dropquote_w10.json',
-              'cache_dropquote_w15.json',
-              'cache_dropquote_w20.json',
-              'cache_dropquote_w25.json']:
-        cache_file = os.path.join(CACHE_DIR, f)
-        if os.path.exists(cache_file):
-            os.remove(cache_file)
-    return jsonify({"message": "Cache cleared"})
+    if os.path.exists(CACHE_DIR):
+        for filename in os.listdir(CACHE_DIR):
+            file_path = os.path.join(CACHE_DIR, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+    return jsonify({"message": "Cache folder cleared"})
 
 
 if __name__ == '__main__':
