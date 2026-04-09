@@ -13,12 +13,13 @@ app = Flask(__name__)
 
 load_dotenv()  # Load environment variables from .env file
 app.secret_key = os.getenv("SECRET_KEY")
-
+QUOTE_FILE = "data/quotes.txt"
+CACHE_DIR = "cache"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def rewrite_text_file(q):
-    with open('quotes.txt', 'w', encoding='utf-8') as f:
+    with open(QUOTE_FILE, 'w', encoding='utf-8') as f:
         for quote in q:
             f.write(f'{quote}\n')
 
@@ -60,13 +61,14 @@ def index():
     size_map = {'easy': 10, 'normal': 15, 'hard': 20}
     grid_size = size_map[difficulty]
 
-    cache_file = f'cache_snakes_{difficulty}.json'
+    filename = f'cache_snakes_{difficulty}.json'
+    cache_file = os.path.join(CACHE_DIR, filename)
 
     if os.path.exists(cache_file):
         with open(cache_file, 'r') as f:
             all_puzzles = json.load(f)
     else:
-        quotes = load_quotes("quotes.txt")
+        quotes = load_quotes(QUOTE_FILE)
         filtered_quotes = filter_quotes_by_grid(quotes, grid_size)
         all_puzzles = []
 
@@ -77,6 +79,9 @@ def index():
                 "grid": [[str(cell) for cell in row] for row in puzzle.grid],
                 "size": puzzle.size
             })
+
+        # Ensure the folder exists before writing it -> Make directory(if its exist, ignore)
+        os.makedirs(CACHE_DIR, exist_ok=True)
 
         with open(cache_file, 'w') as f:
             json.dump(all_puzzles, f)
@@ -94,7 +99,7 @@ def index():
 
 @app.route('/load-quotes')
 def load_quotes_page():
-    quotes = load_quotes("quotes.txt")
+    quotes = load_quotes(QUOTE_FILE)
     return render_template("load_quotes.html", quotes=quotes)
 
 
@@ -111,13 +116,14 @@ def dropquote():
     except ValueError:
         col_width = 20
 
-    cache_file = f'cache_dropquote_w{col_width}.json'
+    filename = f'cache_dropquote_w{col_width}.json'
+    cache_file = os.path.join(CACHE_DIR, filename)
 
     if os.path.exists(cache_file):
         with open(cache_file, 'r') as f:
             all_puzzles = json.load(f)
     else: 
-        quotes = load_quotes("quotes.txt")
+        quotes = load_quotes(QUOTE_FILE)
         all_puzzles = []
 
         for q in quotes:
@@ -158,6 +164,10 @@ def dropquote():
                 "max_col_height": max_col_height,
                 "col_width":      col_width
             })
+
+        # Ensure the folder exists before writing it -> Make directory(if its exist, ignore)
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        
         with open(cache_file, 'w') as f:
             json.dump(all_puzzles, f)
     return render_template(
@@ -236,7 +246,7 @@ def add():
     quote = data.get("quote", "").strip()
     if not quote:
         return jsonify({"error": "Empty quote"}), 400
-    q = load_quotes("quotes.txt")
+    q = load_quotes(QUOTE_FILE)
     add_quote(q, quote)
 
     return jsonify({"message": "Quote added", "quote": quote})
@@ -246,7 +256,7 @@ def add():
 def remove():
     data  = request.get_json()
     index = data.get("index")
-    q     = load_quotes("quotes.txt")
+    q     = load_quotes(QUOTE_FILE)
     if not index or index < 1 or index > len(q):
         return jsonify({"error": "Invalid index"}), 400
     remove_quote(q, index)
@@ -259,7 +269,7 @@ def replace():
     data     = request.get_json()
     index    = data.get("index")
     new_text = data.get("quote", "").strip()
-    q        = load_quotes("quotes.txt")
+    q        = load_quotes(QUOTE_FILE)
     if not index or index < 1 or index > len(q) or not new_text:
         return jsonify({"error": "Invalid input"}), 400
     replace_quote(q, index, new_text)
@@ -274,8 +284,9 @@ def clear_cache():
               'cache_dropquote_w15.json',
               'cache_dropquote_w20.json',
               'cache_dropquote_w25.json']:
-        if os.path.exists(f):
-            os.remove(f)
+        cache_file = os.path.join(CACHE_DIR, f)
+        if os.path.exists(cache_file):
+            os.remove(cache_file)
     return jsonify({"message": "Cache cleared"})
 
 
