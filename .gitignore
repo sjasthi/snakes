@@ -12,13 +12,7 @@ env/
 .DS_Store
 Thumbs.db
 
-cache_snakes_easy.json
-cache_snakes_normal.json
-cache_snakes_hard.json
-cache_dropquote_w10.json
-cache_dropquote_w15.json
-cache_dropquote_w20.json
-cache_dropquote_w25.json
+cache
 
 static/img/rebus/
 words.txt

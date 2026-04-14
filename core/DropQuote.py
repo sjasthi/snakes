@@ -1,6 +1,6 @@
 import random
 import unicodedata
-from Grid import ananya
+from core.Grid import ananya
 
 
 def is_text_cluster(cluster):

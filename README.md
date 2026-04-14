@@ -52,7 +52,12 @@ snakes/
 ├── .gitignore
 │
 ├── static/
-│   ├── style.css           # Custom styles
+│   ├── css/
+|   |    ├── base.css       # (Global layout, Navbar, Pref Bar)
+|   |    ├── snake.css      # (Grid, cells, snake game logic)
+|   |    ├── dropquote.css  # (Letter banks, drop cells, solutions)
+|   |    ├── rebus.css      # (Image clues, rebus blanks)
+|   |    └── print.css      # (All your @media print rules)
 │   └── js/
 │       └── script.js       # DataTable init and CRUD functions
 │

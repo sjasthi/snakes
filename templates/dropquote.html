@@ -2,6 +2,10 @@
 
 {% block title %}Drop Quote{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropquote.css') }}">
+{% endblock %}
+
 {% block content %}
 
 <!-- ── Preferences Bar ── -->
@@ -60,11 +64,17 @@
                 </label>
             </div>
         </div>
+        
+
+        <!-- regenerate all puzzle -->
+        <button class="btn btn-outline-secondary btn-sm ms-auto no-print" onclick="regenerate()">
+            🔄 Regenerate
+        </button>
 
         <!-- Print -->
         <button type="button" class="btn btn-dark btn-sm ms-auto no-print"
                 onclick="window.print()">
-            🖨️ Print Puzzle Book
+            🖨️ Print PDF
         </button>
 
     </form>

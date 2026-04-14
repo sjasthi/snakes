@@ -2,7 +2,7 @@ import random
 import requests
 import unicodedata
 import string
-from Cell import Cell
+from core.Cell import Cell
 
 
 def ananya(quote: str) -> list[str]:
@@ -38,8 +38,8 @@ class Grid:
     def __init__(self, quote: str, size: int = 15):
         self.quote = quote
         self.size = size
-
         self.parsed_quote = self.parse_quote()
+        self.solution_path = []
         self.english = self.detect_language(self.parsed_quote)
         # Create grid with empty cells
         self.grid = [
@@ -104,6 +104,9 @@ class Grid:
         :return: None
         """
 
+        # up left, up, up right, left, right, down left, down, down right
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
         def backtrack(index: int, current_cell: Cell, visited: set) -> bool:
             """
             Recursive helper function to place letters
@@ -119,10 +122,8 @@ class Grid:
             r, c = current_cell.get_position()
             current_cell.update_letter(self.parsed_quote[index])
             visited.add((r, c))
-
-            # up left, up, up right, left, right, down left, down, down right
-            directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-
+            self.solution_path.append([r, c])
+        
             # Collect all valid neighbors
             neighbors = []
             for dr, dc in directions:
@@ -153,6 +154,7 @@ class Grid:
             current_cell.empty = True
             current_cell.letter = 'None'
             visited.remove((r, c))
+            self.solution_path.pop()
             return False
 
         # Start backtracking from the initial cell
