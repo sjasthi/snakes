@@ -4,6 +4,7 @@ from core.Grid import Grid
 from core.DropQuote import DropQuote
 from core.Rebus import Rebus, generate_image
 from core.RebusPixabay import RebusPixabay, generate_image_pixabay
+from core.RebusTelugu import RebusTelugu, generate_image_pixabay as telugu_image_pixabay
 from dotenv import load_dotenv
 import json
 import os
@@ -155,7 +156,7 @@ def rebus():
     if request.method == 'POST':
         # get form data
         selected_type = request.form.get('rebus_type')
-        if selected_type in ('pixabay', 'hugging_face'):
+        if selected_type in ('pixabay', 'hugging_face', 'telugu'):
             session['rebus_type'] = selected_type
             rebus_type = selected_type
 
@@ -173,6 +174,8 @@ def rebus():
         for word in words:
             if rebus_type == 'pixabay':
                 r = RebusPixabay(word)
+            elif rebus_type == 'telugu':
+                r = RebusTelugu(word)
             else:
                 r = Rebus(word)  # HuggingFace
             puzzle = r.to_dict()
@@ -182,9 +185,19 @@ def rebus():
                     if rebus_type == 'pixabay':
                         img_path = generate_image_pixabay(clue['clue_word'])
                         clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+
+                    elif rebus_type == 'telugu':
+                        english = clue.get("english")
+                        if english:
+                            img_path = telugu_image_pixabay(english)
+                            clue['image_url'] = f"img/rebus/{english.lower()}.png" if img_path else None
+                        else:
+                            clue['image_url'] = None
+
                     elif rebus_type == 'hugging_face':
                         img_path = generate_image(clue['clue_word'])
                         clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+
                     else:
                         clue['image_url'] = None
 

@@ -11,8 +11,11 @@
             <option value="pixabay" {% if rebus_type == "pixabay" %}selected{% endif %}>
                 Pixabay Rebus
             </option>
-            <option value="hugging_face" {% if rebus_type == 'classic' %}selected{% endif %}>
+            <option value="hugging_face" {% if rebus_type == "hugging_face" %}selected{% endif %}>
                 HuggingFace Rebus
+            </option>
+            <option value="telugu" {% if rebus_type == "telugu" %}selected{% endif %}>
+                Telugu Rebus
             </option>
         </select>
     </div>

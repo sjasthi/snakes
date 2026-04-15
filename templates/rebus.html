@@ -14,7 +14,14 @@
         <!-- Single word -->
         <div class="mb-3">
             <div>
-                <strong>Current Rebus Type:</strong> {{ 'Pixabay Rebus' if rebus_type == 'pixabay' else 'HuggingFace Rebus' }}
+                {% set rebus_names = {
+                'pixabay': 'Pixabay Rebus',
+                'hugging_face': 'HuggingFace Rebus',
+                'telugu': 'Telugu Rebus'
+                } %}
+
+            <strong>Current Rebus Type:</strong> {{ rebus_names.get(rebus_type, 'Unknown') }}
+
             </div>
             <label class="form-label fw-bold">Enter a word</label>
             <div class="input-group">
@@ -40,9 +47,6 @@
 {% for puzzle in puzzles %}
 <div class="rebus-puzzle puzzle-page mb-5">
 
-    <h2 class="text-center mb-3">
-        Rebus Puzzle — {{ puzzle.target_word|length }} letters
-    </h2>
 
     <div class="rebus-clues">
         {% for clue in puzzle.clues %}
@@ -58,12 +62,6 @@
         {% endfor %}
     </div>
 
-    <!-- Answer blanks -->
-    <div class="rebus-answer mt-3">
-        {% for letter in puzzle.target_word %}
-        <div class="rebus-blank"></div>
-        {% endfor %}
-    </div>
 
 </div>
 {% endfor %}
