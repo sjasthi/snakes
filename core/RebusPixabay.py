@@ -7,57 +7,42 @@ from data.word_bank import WORD_BANK
 load_dotenv()
 
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY")
-IMAGE_FOLDER = "static/img/rebus"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+IMAGE_FOLDER = os.path.join(BASE_DIR, "static", "img", "rebus")
 
 
-def generate_image_pixabay(word: str):
+
+def generate_image_pixabay(english_word: str):
     os.makedirs(IMAGE_FOLDER, exist_ok=True)
-    filepath = os.path.join(IMAGE_FOLDER, f"{word.lower()}.png")
+    filepath = os.path.join(IMAGE_FOLDER, f"{english_word.lower()}.png")
 
-    # Return cached image if it exists
     if os.path.exists(filepath):
         return filepath
 
-    api_url = "https://pixabay.com/api/"
-
     params = {
         "key": PIXABAY_API_KEY,
-        "q": word.lower(),
+        "q": english_word,
         "image_type": "photo",
         "per_page": 10,
         "safesearch": "true"
     }
 
-    response = requests.get(api_url, params=params)
-
-    if response.status_code != 200:
-        print(f"Pixabay request failed: {response.status_code} — {response.text}")
-        return None
-
-    data = response.json()
-    hits = data.get("hits", [])
+    response = requests.get("https://pixabay.com/api/", params=params)
+    hits = response.json().get("hits", [])
 
     if not hits:
-        print(f"No images found for {word}")
         return None
 
-    # Pick a random image
-    image_data = random.choice(hits)
-    image_url = image_data.get("webformatURL")
+    image_url = random.choice(hits).get("webformatURL")
+    img = requests.get(image_url)
 
-    try:
-        img_response = requests.get(image_url)
-        if img_response.status_code == 200:
-            with open(filepath, "wb") as f:
-                f.write(img_response.content)
-            print(f"Image saved for {word} Pixabay")
-            return filepath
-        else:
-            print(f"Failed to download image: {img_response.status_code}")
-            return None
-    except Exception as e:
-        print(f"Error downloading image: {e}")
-        return None
+    if img.status_code == 200:
+        with open(filepath, "wb") as f:
+            f.write(img.content)
+            print(f"Image saved for {english_word} Pixabay")
+        return filepath
+
+    return None
 
 
 class RebusPixabay:
