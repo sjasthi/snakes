@@ -174,14 +174,16 @@ def rebus():
             content = file.read().decode('utf-8', errors='ignore')
             words = [w.strip().upper() for w in content.splitlines() if w.strip()]
 
+        used_words = set()
+
         for word in words:
             for _ in range(selected_count):  # <-- generate multiple puzzles
                 if rebus_type == 'pixabay':
-                    r = RebusPixabay(word)
+                    r = RebusPixabay(word, used_words=used_words)
                 elif rebus_type == 'telugu':
                     r = RebusTelugu(word)
                 else:
-                    r = Rebus(word)
+                    r = Rebus(word, used_words=used_words)
 
                 puzzle = r.to_dict()
 
