@@ -1,18 +1,70 @@
 WORD_BANK = [
-    "APPLE", "BALL", "CAT", "DOG", "EGG", "FISH", "GOAT", "HAND",
-    "ICE", "JAR", "KITE", "LAMP", "MAP", "NEST", "OWL", "PEN",
-    "QUEEN", "ROSE", "SUN", "TREE", "UMBRELLA", "VAN", "WELL",
-    "BOX", "YARN", "ZEBRA", "CAKE", "DRUM", "ELEPHANT", "FROG",
-    "GRAPES", "HOUSE", "INK", "JACKET", "KEY", "LION", "MOON",
-    "NURSE", "ORANGE", "PIANO", "QUILT", "RABBIT", "STAR", "TABLE",
-    "UNIFORM", "VIOLIN", "WHALE", "XRAY", "YACHT", "CLOUD", "DOOR",
-    "EAGLE", "FLAME", "GLOBE", "HEART", "ISLAND", "JUNGLE", "KNIFE",
-    "LADDER", "MOUNTAIN", "NEEDLE", "OCEAN", "PLANT", "RIVER",
-    "SNAKE", "TOWER", "VILLAGE", "WINDOW", "AXLE", "BRIDGE", "CROWN",
-    "DIAMOND", "ENGINE", "FOREST", "GARDEN", "HAMMER", "IRON",
-    "JEWEL", "KETTLE", "LEMON", "MANGO", "NOTEBOOK", "ONION",
-    "PARROT", "ROCKET", "SHELL", "TRAIN", "UNIFORM", "VASE",
-    "WOLF", "ZIPPER", "ANCHOR", "BUTTER", "CANDLE", "DESK"
+    # A
+    "APPLE", "ANT", "ANCHOR", "ARROW", "AXLE", "ALBUM", "ALOE",
+    "ARCH", "ACORN", "ALARM",
+    # B
+    "BALL", "BOAT", "BRIDGE", "BOOK", "BREAD", "BRUSH", "BUCKET",
+    "BUTTERFLY", "BADGE", "BARREL", "BASKET", "BENCH", "BELL",
+    # C
+    "CAT", "CAKE", "CANDLE", "CAR", "CLOCK", "CLOUD", "CROWN",
+    "CHAIR", "CHESS", "CRAB", "CRANE", "CRYSTAL", "CORN", "COIN",
+    # D
+    "DOG", "DRUM", "DOOR", "DESK", "DIAMOND", "DUCK", "DAISY",
+    "DART", "DOLL", "DOLPHIN",
+    # E
+    "EGG", "EAGLE", "ENGINE", "EEL", "ELM",
+    # F
+    "FISH", "FROG", "FLAME", "FOREST", "FLAG", "FENCE", "FEATHER",
+    "FLUTE", "FAN", "FOSSIL",
+    # G
+    "GOAT", "GRAPES", "GLOBE", "GARDEN", "GATE", "GEAR", "GHOST",
+    "GLOVE", "GOLD", "GIRAFFE",
+    # H
+    "HAND", "HOUSE", "HAMMER", "HEART", "HELMET", "HORSE", "HARP",
+    "HIVE", "HOOK", "HORN",
+    # I
+    "ICE", "INK", "IRON", "IGLOO", "IVY", "ISLAND",
+    # J
+    "JAR", "JACKET", "JUNGLE", "JEWEL", "JET",
+    # K
+    "KITE", "KEY", "KNIFE", "KETTLE", "KOALA",
+    # L
+    "LAMP", "LION", "LADDER", "LEAF", "LEMON", "LOCK", "LOG",
+    "LANTERN", "LACE", "LIGHTHOUSE",
+    # M
+    "MAP", "MOON", "MOUNTAIN", "MANGO", "MASK", "MAGNET", "MEDAL",
+    "MIRROR", "MUSHROOM", "MARBLE",
+    # N
+    "NEST", "NEEDLE", "NOTEBOOK", "NET", "NUT",
+    # O
+    "OWL", "ORANGE", "OCEAN", "OAR", "ONION",
+    # P
+    "PEN", "PIANO", "PLANT", "PARROT", "PYRAMID", "PADDLE",
+    "PALACE", "PEAR", "PEARL", "PEBBLE",
+    # Q
+    "QUEEN", "QUILT", "QUILL",
+    # R
+    "ROSE", "RABBIT", "RIVER", "ROCKET", "RING", "RAKE", "RIBBON",
+    "ROCK", "RULER", "ROPE",
+    # S
+    "SUN", "STAR", "SNAKE", "SHELL", "SHIP", "STONE", "SWORD",
+    "SPIDER", "SAIL", "SHIELD",
+    # T
+    "TREE", "TABLE", "TRAIN", "TOWER", "TORCH", "TENT", "TIGER",
+    "THRONE", "THIMBLE", "THORN",
+    # U
+    "UMBRELLA", "UNIFORM", "URN",
+    # V
+    "VAN", "VIOLIN", "VASE", "VINE", "VOLCANO",
+    # W
+    "WELL", "WHALE", "WINDOW", "WOLF", "WING", "WHEEL", "WAND",
+    "WALNUT", "WASP", "WRENCH",
+    # X
+    "XRAY",
+    # Y
+    "YARN", "YACHT", "YAK",
+    # Z
+    "ZEBRA", "ZIPPER", "ZEPPELIN",
 ]
 
 WORD_BANK_TELUGU = {
@@ -212,5 +264,23 @@ WORD_BANK_TELUGU = {
     "సం పాదన": "earning",
     "సం రక్షణ": "protection"
 }
+
+def build_letter_index(word_list):
+    index = {}
+    for word in word_list:
+        for i, ch in enumerate(word.upper()):
+            if ch not in index:
+                index[ch] = []
+            index[ch].append({
+                "clue_word": word,
+                "letter": ch,
+                "position": i + 1,
+                "length": len(word),
+                "hint": f"{i + 1}/{len(word)}"
+            })
+    return index
+
+# Build the index once at import time
+LETTER_INDEX = build_letter_index(WORD_BANK)
 
 

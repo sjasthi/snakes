@@ -2,7 +2,8 @@ import random
 import requests
 import os
 from dotenv import load_dotenv
-from data.word_bank import WORD_BANK
+from data.word_bank import WORD_BANK, LETTER_INDEX
+
 
 load_dotenv()
 
@@ -47,8 +48,10 @@ class Rebus:
     Each clue word contains that letter at a specific position.
     """
 
-    def __init__(self, target_word: str):
+    def __init__(self, target_word: str, used_words: set = None):
         self.target_word = target_word.upper().strip()
+        # track used word accross multiple puzzles
+        self.used_words = used_words if used_words is not None else set()
         self.clues = self.generate_clues()
 
     def generate_clues(self):
@@ -58,39 +61,50 @@ class Rebus:
         Returns a list of dicts with clue info.
         """
         clues = []
+
+        # Track used word within puzzle
+        used_within_puzzle = set()
+
         for letter in self.target_word:
-            clue = self.find_clue_word(letter)
+            clue = self.find_clue_word(letter, used_within_puzzle)
             clues.append(clue)
+            if clue["clue_word"]:
+                used_within_puzzle.add(clue["clue_word"])
+                self.used_words.add(clue["clue_word"])  # mark as used globally too
         return clues
 
-    def find_clue_word(self, letter: str):
+    def find_clue_word(self, letter: str, used_within_puzzle: set):
         """
         Search the word bank for words containing the given letter.
         Pick one randomly and return the word, position, and length.
         """
-        candidates = []
-        for word in WORD_BANK:
-            for i, ch in enumerate(word.upper()):
-                if ch == letter.upper():
-                    candidates.append({
-                        "clue_word": word,
-                        "letter": letter.upper(),
-                        "position": i + 1,       # 1-based position
-                        "length": len(word),
-                        "hint": f"{i + 1}/{len(word)}"
-                    })
-
+        letter = letter.upper()
+    
+        # Get all candidates for this letter from the index
+        all_candidates = LETTER_INDEX.get(letter, [])
+        
+        # Filter out already used words
+        candidates = [
+            c for c in all_candidates
+            if c["clue_word"] not in used_within_puzzle
+            and c["clue_word"] not in self.used_words
+        ]
+        
         if candidates:
             return random.choice(candidates)
-        else:
-            # Fallback if no word found for that letter
-            return {
-                "clue_word": None,
-                "letter": letter.upper(),
-                "position": None,
-                "length": None,
-                "hint": "?"
-            }
+        
+        # Fallback — word bank exhausted, allow reuse
+        print(f"Warning: No unique word found for '{letter}', allowing reuse.")
+        if all_candidates:
+            return random.choice(all_candidates)
+        
+        return {
+            "clue_word": None,
+            "letter": letter,
+            "position": None,
+            "length": None,
+            "hint": "?"
+        }
 
     def to_dict(self):
         return {

@@ -1,5 +1,5 @@
 import re
-import core.Grid as Grid
+# import core.Grid as Grid
 
 QUOTE_FILE = "data/quotes.txt"
 
@@ -50,20 +50,20 @@ def print_quotes(quotes: list[str]) -> None:
         print(f"{i}. {q}")
 
 
-def generate_puzzles(quotes: list[str]):
-    """
-    Generate puzzles using the given list of quotes
-    :param quotes: List of quotes
-    :return: List of puzzles
-    """
-    puzzles = []
-    for quote in quotes[:10]:
-        puzzle = Grid.Grid(quote=quote)
-        # puzzle.print_grid()
-        # print("\n")
-        puzzles.append(puzzle)
+# def generate_puzzles(quotes: list[str]):
+#     """
+#     Generate puzzles using the given list of quotes
+#     :param quotes: List of quotes
+#     :return: List of puzzles
+#     """
+#     puzzles = []
+#     for quote in quotes[:10]:
+#         puzzle = Grid.Grid(quote=quote)
+#         # puzzle.print_grid()
+#         # print("\n")
+#         puzzles.append(puzzle)
 
-    return puzzles
+#     return puzzles
 
 
 if __name__ == '__main__':
