@@ -150,17 +150,20 @@ def dropquote():
 @app.route('/rebus', methods=['GET', 'POST'])
 def rebus():
     puzzles = []
+    rebus_type = session.get('rebus_type', 'pixabay')
 
-    rebus_type = session.get('rebus_type', 'pixabay')  # default if not set
+    selected_count = 1  # default
 
     if request.method == 'POST':
-        # get form data
         selected_type = request.form.get('rebus_type')
         if selected_type in ('pixabay', 'hugging_face', 'telugu'):
             session['rebus_type'] = selected_type
             rebus_type = selected_type
 
-        # then process words as usual
+        # NEW: capture which button was clicked
+        selected_count = int(request.form.get("count", 1))
+
+        # process words
         words = []
         single_word = request.form.get('word', '').strip().upper()
         if single_word:
@@ -171,37 +174,44 @@ def rebus():
             content = file.read().decode('utf-8', errors='ignore')
             words = [w.strip().upper() for w in content.splitlines() if w.strip()]
 
-        used_words = set()
-
         for word in words:
-            if rebus_type == 'pixabay':
-                r = RebusPixabay(word, used_words=used_words)
-            elif rebus_type == 'telugu':
-                r = RebusTelugu(word, used_words=used_words)
-            else:
-                r = Rebus(word, used_words=used_words)
+            for _ in range(selected_count):  # <-- generate multiple puzzles
+                if rebus_type == 'pixabay':
+                    r = RebusPixabay(word)
+                elif rebus_type == 'telugu':
+                    r = RebusTelugu(word)
+                else:
+                    r = Rebus(word)
 
-            puzzle = r.to_dict()
+                puzzle = r.to_dict()
 
-            for clue in puzzle['clues']:
-                if clue['clue_word']:
-                    if rebus_type == 'pixabay':
-                        img_path = generate_image_pixabay(clue['clue_word'])
-                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
-                    elif rebus_type == 'telugu':
-                        english = clue.get("english")
-                        if english:
-                            img_path = telugu_image_pixabay(english)
-                            clue['image_url'] = f"img/rebus/{english.lower()}.png" if img_path else None
-                        else:
-                            clue['image_url'] = None
-                    else:
-                        img_path = generate_image(clue['clue_word'])
-                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                # process images
+                for clue in puzzle['clues']:
+                    if clue['clue_word']:
+                        if rebus_type == 'pixabay':
+                            img_path = generate_image_pixabay(clue['clue_word'])
+                            clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
 
-            puzzles.append(puzzle)
+                        elif rebus_type == 'telugu':
+                            english = clue.get("english")
+                            if english:
+                                img_path = telugu_image_pixabay(english)
+                                clue['image_url'] = f"img/rebus/{english.lower()}.png" if img_path else None
+                            else:
+                                clue['image_url'] = None
 
-    return render_template("rebus.html", puzzles=puzzles, rebus_type=rebus_type)
+                        elif rebus_type == 'hugging_face':
+                            img_path = generate_image(clue['clue_word'])
+                            clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+
+                puzzles.append(puzzle)
+
+    return render_template(
+        "rebus.html",
+        puzzles=puzzles,
+        rebus_type=rebus_type,
+        selected_count=selected_count
+    )
 
 
 @app.route('/settings', methods=['GET', 'POST'])

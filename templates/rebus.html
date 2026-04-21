@@ -21,13 +21,25 @@
                 } %}
 
             <strong>Current Rebus Type:</strong> {{ rebus_names.get(rebus_type, 'Unknown') }}
-
             </div>
+
             <label class="form-label fw-bold">Enter a word</label>
             <div class="input-group">
                 <input type="text" name="word" class="form-control"
                        placeholder="e.g. METRO">
-                <button type="submit" class="btn btn-primary">Generate</button>
+                {% set counts = [1, 10, 25, 50, 100] %}
+
+                <div>
+                    {% for c in counts %}
+                        <button type="submit"
+                                name="count"
+                                value="{{ c }}"
+                                class="btn {% if c == selected_count %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            {{ "Generate " ~ c if c == 1 else c }}
+                        </button>
+                    {% endfor %}
+                </div>
+
             </div>
         </div>
 
