@@ -171,13 +171,16 @@ def rebus():
             content = file.read().decode('utf-8', errors='ignore')
             words = [w.strip().upper() for w in content.splitlines() if w.strip()]
 
+        used_words = set()
+
         for word in words:
             if rebus_type == 'pixabay':
-                r = RebusPixabay(word)
+                r = RebusPixabay(word, used_words=used_words)
             elif rebus_type == 'telugu':
-                r = RebusTelugu(word)
+                r = RebusTelugu(word, used_words=used_words)
             else:
-                r = Rebus(word)  # HuggingFace
+                r = Rebus(word, used_words=used_words)
+
             puzzle = r.to_dict()
 
             for clue in puzzle['clues']:
@@ -185,7 +188,6 @@ def rebus():
                     if rebus_type == 'pixabay':
                         img_path = generate_image_pixabay(clue['clue_word'])
                         clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
-
                     elif rebus_type == 'telugu':
                         english = clue.get("english")
                         if english:
@@ -193,13 +195,9 @@ def rebus():
                             clue['image_url'] = f"img/rebus/{english.lower()}.png" if img_path else None
                         else:
                             clue['image_url'] = None
-
-                    elif rebus_type == 'hugging_face':
+                    else:
                         img_path = generate_image(clue['clue_word'])
                         clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
-
-                    else:
-                        clue['image_url'] = None
 
             puzzles.append(puzzle)
 
