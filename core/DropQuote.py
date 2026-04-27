@@ -6,11 +6,21 @@ from core.Grid import ananya
 def is_text_cluster(cluster):
     return all(unicodedata.category(ch)[0] in ("L", "M") for ch in cluster)
 
+def _is_english_only(quote: str) -> bool:
+    """Return True if the quote contains only ASCII letters (no Telugu or other Unicode scripts)."""
+    return all(
+        unicodedata.category(ch)[0] not in ("L", "M") or ch.isascii()
+        for ch in quote
+    )
 
 class DropQuote:
     def __init__(self, quote: str, width: int = 20):
         self.width = width
-        self.quote = ananya(quote)
+        # Skip the external API entirely for English-only quotes
+        if _is_english_only(quote):
+            self.quote = list(quote)
+        else:
+            self.quote = ananya(quote)
         self.columns = [self.letters_in_column(i) for i in range(self.width)]
 
     def split_quote(self):
