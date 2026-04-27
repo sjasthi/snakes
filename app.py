@@ -229,6 +229,18 @@ def settings():
     return render_template('settings.html', rebus_type=rebus_type)
 
 
+MAX_QUOTE_LENGTH = 500
+
+
+def clear_puzzle_cache():
+    """Remove all cached puzzle JSON files so stale data is never served."""
+    if os.path.exists(CACHE_DIR):
+        for filename in os.listdir(CACHE_DIR):
+            file_path = os.path.join(CACHE_DIR, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+
 # ── CRUD ──────────────────────────────────────────────────────────────────────
 
 @app.route("/quotes/add", methods=["POST"])
@@ -237,9 +249,11 @@ def add():
     quote = data.get("quote", "").strip()
     if not quote:
         return jsonify({"error": "Empty quote"}), 400
+    if len(quote) > MAX_QUOTE_LENGTH:
+        return jsonify({"error": f"Quote exceeds {MAX_QUOTE_LENGTH} characters"}), 400
     q = load_quotes(QUOTE_FILE)
     add_quote(q, quote)
-
+    clear_puzzle_cache()
     return jsonify({"message": "Quote added", "quote": quote})
 
 
@@ -251,7 +265,7 @@ def remove():
     if not index or index < 1 or index > len(q):
         return jsonify({"error": "Invalid index"}), 400
     remove_quote(q, index)
-
+    clear_puzzle_cache()
     return jsonify({"message": "Quote removed", "index": index})
 
 
@@ -263,16 +277,15 @@ def replace():
     q        = load_quotes(QUOTE_FILE)
     if not index or index < 1 or index > len(q) or not new_text:
         return jsonify({"error": "Invalid input"}), 400
+    if len(new_text) > MAX_QUOTE_LENGTH:
+        return jsonify({"error": f"Quote exceeds {MAX_QUOTE_LENGTH} characters"}), 400
     replace_quote(q, index, new_text)
+    clear_puzzle_cache()
     return jsonify({"message": "Quote replaced", "index": index, "new": new_text})
 
 @app.route('/clear-cache', methods=['POST'])
 def clear_cache():
-    if os.path.exists(CACHE_DIR):
-        for filename in os.listdir(CACHE_DIR):
-            file_path = os.path.join(CACHE_DIR, filename)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+    clear_puzzle_cache()
     return jsonify({"message": "Cache folder cleared"})
 
 
