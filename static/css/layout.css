@@ -55,3 +55,109 @@ body {
     display: flex;
     align-items: flex-end;
 }
+
+/* ── Footer (loaded globally via layout.html) ──────────────── */
+
+.site-footer {
+    background: #0C0F14;
+    color: rgba(255,255,255,0.5);
+    padding: 48px 0 32px;
+}
+
+.footer-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    margin-bottom: 28px;
+}
+
+.footer-brand img {
+    height: 28px;
+    opacity: 0.7;
+    margin-bottom: 12px;
+    display: block;
+    filter: brightness(0) invert(1);
+}
+
+.footer-brand p {
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.35);
+    max-width: 240px;
+    margin: 0;
+}
+
+.footer-heading {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 14px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.footer-links a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.38);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.footer-links a:hover { color: #D4A847; }
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.footer-copy {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.28);
+}
+
+.footer-course {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.28);
+    text-align: right;
+}
+
+.footer-course strong {
+    color: #D4A847;
+    font-weight: 500;
+}
+
+@media (max-width: 767px) {
+    .footer-inner   { grid-template-columns: 1fr 1fr; }
+    .footer-brand   { grid-column: 1 / -1; }
+    .footer-bottom  { flex-direction: column; text-align: center; }
+    .footer-course  { text-align: center; }
+}
+
+@media (max-width: 480px) {
+    .footer-inner { grid-template-columns: 1fr; }
+}
+
+/* ── Push footer to bottom on short pages ─────────────────── */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container-fluid.mt-5 {
+    flex: 1;
+}

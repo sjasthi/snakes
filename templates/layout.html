@@ -39,7 +39,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link" href="{{ url_for('load_quotes_page') }}">Load Quotes</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Snakes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('snake') }}">Snakes</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('dropquote') }}">DropQuote</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('rebus') }}">Rebus</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('settings') }}">Settings</a></li>
@@ -54,6 +54,44 @@
         {% block content %} {% endblock %}
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="site-footer no-print">
+      <div class="container-xl px-4 px-lg-5">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <img src="{{ url_for('static', filename='img/nav-bar.png') }}" alt="Snakes logo">
+            <p>A multi-lingual puzzle book generator built with Python &amp; Flask. Generates Snake, Drop Quote, and Rebus puzzles from any quote library.</p>
+          </div>
+          <div>
+            <div class="footer-heading">Puzzles</div>
+            <ul class="footer-links">
+              <li><a href="{{ url_for('snake') }}">🐍 Snake Puzzle</a></li>
+              <li><a href="{{ url_for('dropquote') }}">📊 Drop Quote</a></li>
+              <li><a href="{{ url_for('rebus') }}">🖼️ Rebus Puzzle</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-heading">Manage</div>
+            <ul class="footer-links">
+              <li><a href="{{ url_for('load_quotes_page') }}">Load Quotes</a></li>
+              <li><a href="{{ url_for('settings') }}">Settings</a></li>
+              <li><a href="#">Help</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span class="footer-copy">
+            &copy; 2026 Nathan Vo &amp; Rocky Vang &nbsp;&middot;&nbsp; MIT License
+          </span>
+          <span class="footer-course">
+            <strong>ICS 499</strong> &mdash; Software Engineering &amp; Capstone Project &nbsp;&middot;&nbsp;
+            Prof. Siva Jasthi &nbsp;&middot;&nbsp; Spring 2026
+          </span>
+        </div>
+      </div>
+    </footer>
 
     <!-- bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

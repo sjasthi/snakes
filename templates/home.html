@@ -1,0 +1,202 @@
+{% extends "layout.html" %}
+
+{% block title %}Home — Snakes Puzzle Generator{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero card ── -->
+<div class="home-hero mb-4">
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="badge bg-dark fs-6">🐍 Snakes</span>
+        <span class="badge bg-secondary">ICS 499 · Spring 2026</span>
+    </div>
+    <h1 class="home-title">Multi-Lingual Puzzle Generator</h1>
+    <p class="home-lead">
+        Turn any quote library into a printable puzzle book. Choose from three puzzle types —
+        Snake grids, Drop Quotes, and Rebus challenges — with support for English and Telugu.
+    </p>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url_for('snake') }}" class="btn btn-dark btn-sm">🐍 Snake Puzzle</a>
+        <a href="{{ url_for('dropquote') }}" class="btn btn-outline-secondary btn-sm">📊 Drop Quote</a>
+        <a href="{{ url_for('rebus') }}" class="btn btn-outline-secondary btn-sm">🖼️ Rebus</a>
+        <a href="{{ url_for('load_quotes_page') }}" class="btn btn-outline-secondary btn-sm">📂 Load Quotes</a>
+    </div>
+</div>
+
+<!-- ── Stats row ── -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="home-stat-card">
+            <div class="home-stat-num">3</div>
+            <div class="home-stat-label">Puzzle Types</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="home-stat-card">
+            <div class="home-stat-num">3</div>
+            <div class="home-stat-label">Difficulty Levels</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="home-stat-card">
+            <div class="home-stat-num">{{ total_quotes }}</div>
+            <div class="home-stat-label">Quotes Loaded</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="home-stat-card">
+            <div class="home-stat-num">2</div>
+            <div class="home-stat-label">Languages</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Puzzle cards ── -->
+<h2 class="home-section-heading mb-3">Puzzle Types</h2>
+<div class="row g-3 mb-4">
+
+    <!-- Snake -->
+    <div class="col-md-4">
+        <a href="{{ url_for('snake') }}" class="home-puzzle-card">
+            <div class="home-puzzle-icon">🐍</div>
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <strong>Snake Puzzle</strong>
+                    <span class="badge bg-success-subtle text-success-emphasis">Word Grid</span>
+                </div>
+                <p class="home-puzzle-desc">
+                    A quote snakes through a letter grid. Trace the hidden path from cell to cell to reveal the message.
+                </p>
+                <ul class="home-puzzle-features">
+                    <li>Easy 10×10 · Normal 15×15 · Hard 20×20</li>
+                    <li>Random filler letters camouflage the path</li>
+                    <li>Toggleable solution before printing</li>
+                </ul>
+            </div>
+        </a>
+    </div>
+
+    <!-- Drop Quote -->
+    <div class="col-md-4">
+        <a href="{{ url_for('dropquote') }}" class="home-puzzle-card">
+            <div class="home-puzzle-icon">📊</div>
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <strong>Drop Quote</strong>
+                    <span class="badge bg-primary-subtle text-primary-emphasis">Column Drop</span>
+                </div>
+                <p class="home-puzzle-desc">
+                    Letters fall into columns above a blank answer grid. Decide which letter fills each slot to spell the quote.
+                </p>
+                <ul class="home-puzzle-features">
+                    <li>Column widths: 10, 15, 20, or 25</li>
+                    <li>Shuffled columns keep every puzzle unique</li>
+                    <li>Show/hide solution toggle before printing</li>
+                </ul>
+            </div>
+        </a>
+    </div>
+
+    <!-- Rebus -->
+    <div class="col-md-4">
+        <a href="{{ url_for('rebus') }}" class="home-puzzle-card">
+            <div class="home-puzzle-icon">🖼️</div>
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <strong>Rebus Puzzle</strong>
+                    <span class="badge bg-warning-subtle text-warning-emphasis">Image Clues</span>
+                </div>
+                <p class="home-puzzle-desc">
+                    Each letter of the target word is clued by an image. Identify the picture, find the marked letter, solve the word.
+                </p>
+                <ul class="home-puzzle-features">
+                    <li>Pixabay photos or AI-generated images</li>
+                    <li>Full Telugu Rebus via word bank</li>
+                    <li>Generate multiple puzzles per word</li>
+                </ul>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<!-- ── How it works ── -->
+<h2 class="home-section-heading mb-3">How It Works</h2>
+<div class="home-card mb-4">
+    <div class="row g-0">
+        <div class="col-md-3 home-step">
+            <div class="home-step-num">1</div>
+            <div class="home-step-title">Load Quotes</div>
+            <p class="home-step-desc">Upload a <code>.txt</code> file or add quotes one by one. Supports English and Telugu.</p>
+        </div>
+        <div class="col-md-3 home-step">
+            <div class="home-step-num">2</div>
+            <div class="home-step-title">Pick a Puzzle</div>
+            <p class="home-step-desc">Navigate to Snake, Drop Quote, or Rebus. Puzzles generate automatically from your library.</p>
+        </div>
+        <div class="col-md-3 home-step">
+            <div class="home-step-num">3</div>
+            <div class="home-step-title">Set Preferences</div>
+            <p class="home-step-desc">Choose difficulty, column width, or image source. Toggle the solution on or off.</p>
+        </div>
+        <div class="col-md-3 home-step home-step-last">
+            <div class="home-step-num">4</div>
+            <div class="home-step-title">Print Your Book</div>
+            <p class="home-step-desc">Click Print PDF. Every puzzle page breaks cleanly — ready to hand out as a full book.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ── About ── -->
+<h2 class="home-section-heading mb-3">About</h2>
+<div class="home-card mb-4">
+    <div class="row g-4 align-items-start">
+        <div class="col-md-6">
+            <p class="mb-2">
+                <strong>Snakes</strong> is a capstone project built for
+                <strong>ICS 499 — Software Engineering &amp; Capstone Project</strong>,
+                Spring 2026, under Professor Siva Jasthi.
+            </p>
+            <p class="mb-2">
+                The app takes a collection of quotes and generates a fully printable puzzle book
+                with Snake Word puzzles, Drop Quote puzzles, and Rebus image challenges — with
+                multi-script support for both English and Telugu.
+            </p>
+            <p class="mb-0 text-muted" style="font-size: 0.85rem;">
+                Built by <strong>Nathan Vo</strong> &amp; <strong>Rocky Vang</strong>
+                &nbsp;·&nbsp; Python · Flask · Bootstrap 5 · jQuery
+            </p>
+        </div>
+        <div class="col-md-6">
+            <ul class="home-about-list">
+                <li>
+                    <span class="home-about-icon">🗂️</span>
+                    <div>
+                        <strong>Full quote management</strong><br>
+                        <span class="text-muted" style="font-size:0.85rem;">Upload, add, remove, and replace quotes with live CRUD — no page reload required.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="home-about-icon">🌐</span>
+                    <div>
+                        <strong>Telugu &amp; English support</strong><br>
+                        <span class="text-muted" style="font-size:0.85rem;">The Ananya API handles multi-byte Telugu grapheme clusters so puzzles render correctly.</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="home-about-icon">🖨️</span>
+                    <div>
+                        <strong>Print-ready output</strong><br>
+                        <span class="text-muted" style="font-size:0.85rem;">Every puzzle page is styled for clean browser printing with automatic page breaks.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

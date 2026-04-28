@@ -20,10 +20,14 @@ def ananya(quote: str) -> list[str]:
     }
 
     api_url = f'https://jasthi.com/ananya/api.php/characters/logical?string={quote}&language=Telugu'
-    response = requests.get(api_url, headers=headers)
-    data = response.json()
-
-    return data['result']
+    try:
+        response = requests.get(api_url, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        return data['result']
+    except Exception as e:
+        print(f"Warning: ananya API unavailable ({e}), falling back to character split.")
+        return list(quote)
 
 
 class Grid:

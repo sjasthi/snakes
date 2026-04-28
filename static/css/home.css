@@ -1,0 +1,205 @@
+/* ── Home page ───────────────────────────────────────────── */
+
+/* Hero */
+.home-hero {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    padding: 32px;
+}
+
+.home-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.home-lead {
+    font-size: 0.95rem;
+    color: #555;
+    max-width: 620px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Section heading */
+.home-section-heading {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin: 0;
+}
+
+/* Stat cards */
+.home-stat-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    padding: 20px 24px;
+    text-align: center;
+}
+
+.home-stat-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.home-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #888;
+    margin-top: 4px;
+}
+
+/* Puzzle cards */
+.home-puzzle-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.home-puzzle-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    color: inherit;
+    text-decoration: none;
+}
+
+.home-puzzle-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.home-puzzle-desc {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+    margin: 6px 0 10px;
+}
+
+.home-puzzle-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.home-puzzle-features li {
+    font-size: 0.8rem;
+    color: #888;
+    padding-left: 14px;
+    position: relative;
+}
+
+.home-puzzle-features li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: #bbb;
+}
+
+/* Generic card (How it works, About) */
+.home-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    padding: 28px 32px;
+}
+
+/* How it works steps */
+.home-step {
+    padding: 0 24px 0 0;
+    border-right: 1px solid #e2e8f0;
+}
+
+.home-step-last {
+    border-right: none;
+    padding-right: 0;
+}
+
+.home-step-num {
+    width: 36px;
+    height: 36px;
+    background: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.home-step-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.home-step-desc {
+    font-size: 0.83rem;
+    color: #888;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* About list */
+.home-about-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.home-about-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.home-about-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .home-step {
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 0 0 20px 0;
+        margin-bottom: 20px;
+    }
+    .home-step-last {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+    .home-card {
+        padding: 20px;
+    }
+}
