@@ -65,6 +65,28 @@
             </div>
         </div>
 
+        <!-- Language -->
+        <div class="pref-group">
+            <label class="pref-label">Language</label>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="lang"
+                       id="lang-en" value="english"
+                       {% if lang == 'english' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-secondary btn-sm" for="lang-en">
+                    🇺🇸 English
+                </label>
+
+                <input type="radio" class="btn-check" name="lang"
+                       id="lang-te" value="telugu"
+                       {% if lang == 'telugu' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-secondary btn-sm" for="lang-te">
+                    🇮🇳 Telugu
+                </label>
+            </div>
+        </div>
+
         <!-- Showing the number of quotes generated -->
         <div class="pref-info">
             <span class="badge bg-secondary">
