@@ -3,21 +3,25 @@ import random
 import requests
 
 
-def telugu_filler():
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' +
-                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
-    }
+# Only call API when first needed 
+_tel_filler = None
 
-    api_url = 'https://jasthi.com/ananya/api.php/characters/filler?language=telugu&count=100'
-    response = requests.get(api_url, headers=headers)
-    data = response.json()
-
-    return data['result']
-
-
-tel_filler = telugu_filler()
-
+def get_tel_filler():
+    global _tel_filler
+    if _tel_filler is None:
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                              'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+            }
+            api_url = 'https://jasthi.com/ananya/api.php/characters/filler?language=telugu&count=100'
+            response = requests.get(api_url, headers=headers, timeout=10)
+            data = response.json()
+            _tel_filler = data['result']
+        except Exception as e:
+            print(f"Warning: Could not load Telugu filler characters: {e}")
+            _tel_filler = []   # empty fallback so app doesn't crash
+    return _tel_filler
 
 class Cell:
     """
@@ -79,7 +83,12 @@ class Cell:
             self.letter = random.choice(string.ascii_letters).upper()
             self.empty = False
         else:
-            self.letter = self.letter = random.choice(tel_filler)
+            filler = get_tel_filler()
+            if filler:
+                self.letter = random.choice(filler)
+            else:
+                # Fall back if API unavailable -> use English letters
+                self.letter = random.choice(string.ascii_letters).upper()
             self.empty = False
 
     def __str__(self) -> str:

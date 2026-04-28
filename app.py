@@ -20,6 +20,12 @@ CACHE_DIR = "cache"
 
 @app.route('/')
 def index():
+    quotes = load_quotes(QUOTE_FILE)
+    return render_template("home.html", total_quotes=len(quotes))
+
+
+@app.route('/snake')
+def snake():
     difficulty = request.args.get('difficulty', 'normal')
     show_solution = request.args.get('show_solution', 'false') == 'true'
 
