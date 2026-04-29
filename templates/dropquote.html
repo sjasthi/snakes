@@ -64,10 +64,31 @@
                 </label>
             </div>
         </div>
-        
+
+        <!-- Language -->
+        <div class="pref-group">
+            <label class="pref-label">Language</label>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="lang"
+                       id="dq-lang-en" value="english"
+                       {% if lang == 'english' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-secondary btn-sm" for="dq-lang-en">
+                    🇺🇸 English
+                </label>
+
+                <input type="radio" class="btn-check" name="lang"
+                       id="dq-lang-te" value="telugu"
+                       {% if lang == 'telugu' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                <label class="btn btn-outline-secondary btn-sm" for="dq-lang-te">
+                    🇮🇳 Telugu
+                </label>
+            </div>
+        </div>
 
         <!-- regenerate all puzzle -->
-        <button class="btn btn-outline-secondary btn-sm ms-auto no-print" onclick="regenerate()">
+        <button class="btn btn-outline-secondary btn-sm no-print" onclick="regenerate()">
             🔄 Regenerate
         </button>
 
@@ -89,7 +110,6 @@
         Drop the letters from each column into the blank squares below to form a quote.
     </p>
 
-    <!-- Show solution if preference is on -->
     {% if show_solution %}
     <p class="dq-solution no-print">
         <strong>Answer:</strong> {{ puzzle.quote }}

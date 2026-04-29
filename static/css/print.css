@@ -68,3 +68,9 @@
     .dq-solution { display: none !important; }
     .no-print   { display: none !important; }
 }
+
+    .rebus-puzzle {
+        box-shadow: none;
+        margin: 0 auto;
+        padding: 16px;
+    }
