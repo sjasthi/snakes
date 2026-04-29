@@ -8,58 +8,94 @@
 
 {% block content %}
 
-<div class="mb-4 no-print">
+<!-- ── Generate Form ── -->
+<div class="pref-bar no-print mb-4">
     <form method="POST" action="{{ url_for('rebus') }}" enctype="multipart/form-data">
 
-        <!-- Single word -->
-        <div class="mb-3">
-            <div>
-                {% set rebus_names = {
-                'pixabay': 'Pixabay Rebus',
-                'hugging_face': 'HuggingFace Rebus',
-                'telugu': 'Telugu Rebus'
-                } %}
+        <!-- Rebus type indicator -->
+        <div class="pref-group">
+            <label class="pref-label">Type</label>
+            {% set rebus_names = {
+                'pixabay':      'Pixabay',
+                'hugging_face': 'HuggingFace',
+                'telugu':       'Telugu'
+            } %}
+            <span class="badge bg-secondary">{{ rebus_names.get(rebus_type, 'Unknown') }}</span>
+        </div>
 
-            <strong>Current Rebus Type:</strong> {{ rebus_names.get(rebus_type, 'Unknown') }}
-            </div>
+        <!-- Single word input -->
+        <div class="pref-group">
+            <label class="pref-label">Word</label>
+            <input type="text" name="word" class="form-control form-control-sm"
+                   placeholder="e.g. METRO" style="width: 160px">
+        </div>
 
-            <label class="form-label fw-bold">Enter a word</label>
-            <div class="input-group">
-                <input type="text" name="word" class="form-control"
-                       placeholder="e.g. METRO">
-                {% set counts = [1, 10, 25, 50, 100] %}
-
-                <div>
-                    {% for c in counts %}
-                        <button type="submit"
-                                name="count"
-                                value="{{ c }}"
-                                class="btn {% if c == selected_count %}btn-primary{% else %}btn-outline-primary{% endif %}">
-                            {{ "Generate " ~ c if c == 1 else c }}
-                        </button>
-                    {% endfor %}
-                </div>
-
+        <!-- Count buttons -->
+        <div class="pref-group">
+            <label class="pref-label">Generate</label>
+            <div class="btn-group" role="group">
+                {% for c in [1, 10, 25, 50, 100] %}
+                    <button type="submit" name="count" value="{{ c }}"
+                            class="btn btn-sm {% if c == selected_count %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        {{ c }}
+                    </button>
+                {% endfor %}
             </div>
         </div>
 
         <!-- File upload -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Or upload a word list (.txt)</label>
-            <div class="input-group">
+        <div class="pref-group rebus-upload-group">
+            <label class="pref-label">Word List</label>
+            <div class="input-group input-group-sm">
                 <input type="file" name="wordFile" class="form-control" accept=".txt">
-                <button type="submit" class="btn btn-secondary">Upload & Generate</button>
+                <button type="submit" class="btn btn-secondary">Upload</button>
             </div>
         </div>
 
     </form>
 </div>
 
-<!-- Puzzles -->
+<!-- ── Show Solution toggle (only when puzzles exist) ── -->
+{% if puzzles %}
+<div class="pref-bar no-print mb-4">
+    <div class="d-flex align-items-center gap-3">
+        <div class="pref-group">
+            <label class="pref-label">Solution</label>
+            <div class="btn-group" role="group">
+                <button type="button" id="btn-hide"
+                        class="btn btn-sm btn-secondary"
+                        onclick="setSolution(false)">Hidden</button>
+                <button type="button" id="btn-show"
+                        class="btn btn-sm btn-outline-warning"
+                        onclick="setSolution(true)">Revealed</button>
+            </div>
+        </div>
+
+        <span class="badge bg-secondary">
+            {{ puzzles|length }} puzzle{{ 's' if puzzles|length != 1 else '' }}
+        </span>
+
+        <button type="button" class="btn btn-dark btn-sm ms-auto"
+                onclick="window.print()">
+            🖨️ Print PDF
+        </button>
+    </div>
+</div>
+{% endif %}
+
+<!-- ── Puzzles ── -->
 {% for puzzle in puzzles %}
 <div class="rebus-puzzle puzzle-page mb-5">
 
+    <!-- Header — shows on screen and print -->
+    <div class="rebus-puzzle-header">
+        <p class="rebus-puzzle-num">Puzzle #{{ loop.index }}</p>
+        <p class="rebus-puzzle-instructions">
+            Identify each image, find the letter at the position shown, then combine to spell the answer.
+        </p>
+    </div>
 
+    <!-- Clue images -->
     <div class="rebus-clues">
         {% for clue in puzzle.clues %}
         <div class="rebus-clue">
@@ -74,8 +110,51 @@
         {% endfor %}
     </div>
 
+    <!-- Answer blanks -->
+    <div class="rebus-answer-row">
+        {% for clue in puzzle.clues %}
+        <div class="rebus-blank-cell">
+            <div class="rebus-blank" data-letter="{{ clue['cluster'] if 'cluster' in clue and clue['cluster'] else clue['letter'] if 'letter' in clue and clue['letter'] else '?' }}">
+            </div>
+            <div class="rebus-blank-num">{{ loop.index }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Solution (hidden by default) -->
+    <div class="rebus-solution" style="display:none">
+        <strong>Answer:</strong> {{ puzzle.target_word }}
+    </div>
 
 </div>
 {% endfor %}
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+function setSolution(show) {
+    // Toggle blanks
+    document.querySelectorAll('.rebus-blank').forEach(el => {
+        if (show) {
+            el.textContent = el.dataset.letter || '?';
+            el.classList.add('rebus-blank-revealed');
+        } else {
+            el.textContent = '';
+            el.classList.remove('rebus-blank-revealed');
+        }
+    });
+
+    // Toggle solution banners
+    document.querySelectorAll('.rebus-solution').forEach(el => {
+        el.style.display = show ? '' : 'none';
+    });
+
+    // Toggle button styles
+    document.getElementById('btn-hide').className =
+        show ? 'btn btn-sm btn-outline-secondary' : 'btn btn-sm btn-secondary';
+    document.getElementById('btn-show').className =
+        show ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-warning';
+}
+</script>
 {% endblock %}

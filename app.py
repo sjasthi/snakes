@@ -186,10 +186,9 @@ def dropquote():
 
 @app.route('/rebus', methods=['GET', 'POST'])
 def rebus():
-    puzzles = []
-    rebus_type = session.get('rebus_type', 'pixabay')
-
-    selected_count = 1  # default
+    puzzles        = []
+    rebus_type     = session.get('rebus_type', 'pixabay')
+    selected_count = 1
 
     if request.method == 'POST':
         selected_type = request.form.get('rebus_type')
@@ -197,11 +196,9 @@ def rebus():
             session['rebus_type'] = selected_type
             rebus_type = selected_type
 
-        # NEW: capture which button was clicked
         selected_count = int(request.form.get("count", 1))
 
-        # process words
-        words = []
+        words       = []
         single_word = request.form.get('word', '').strip().upper()
         if single_word:
             words = [single_word]
@@ -209,12 +206,12 @@ def rebus():
         file = request.files.get('wordFile')
         if file and file.filename:
             content = file.read().decode('utf-8', errors='ignore')
-            words = [w.strip().upper() for w in content.splitlines() if w.strip()]
+            words   = [w.strip().upper() for w in content.splitlines() if w.strip()]
 
         used_words = set()
 
         for word in words:
-            for _ in range(selected_count):  # <-- generate multiple puzzles
+            for _ in range(selected_count):
                 if rebus_type == 'pixabay':
                     r = RebusPixabay(word, used_words=used_words)
                 elif rebus_type == 'telugu':
@@ -224,24 +221,26 @@ def rebus():
 
                 puzzle = r.to_dict()
 
-                # process images
-                for clue in puzzle['clues']:
-                    if clue['clue_word']:
-                        if rebus_type == 'pixabay':
-                            img_path = generate_image_pixabay(clue['clue_word'])
-                            clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                # ── Fetch all images in parallel ──────────────────────────
+                def fetch_clue_image(clue):
+                    if not clue.get('clue_word'):
+                        return
+                    if rebus_type == 'pixabay':
+                        img_path = generate_image_pixabay(clue['clue_word'])
+                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                    elif rebus_type == 'telugu':
+                        english = clue.get('english')
+                        if english:
+                            img_path = generate_image_pixabay(english)
+                            clue['image_url'] = f"img/rebus/{english.lower()}.png" if img_path else None
+                        else:
+                            clue['image_url'] = None
+                    elif rebus_type == 'hugging_face':
+                        img_path = generate_image(clue['clue_word'])
+                        clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
 
-                        elif rebus_type == 'telugu':
-                            english = clue.get("english")
-                            if english:
-                                img_path = telugu_image_pixabay(english)
-                                clue['image_url'] = f"img/rebus/{english.lower()}.png" if img_path else None
-                            else:
-                                clue['image_url'] = None
-
-                        elif rebus_type == 'hugging_face':
-                            img_path = generate_image(clue['clue_word'])
-                            clue['image_url'] = f"img/rebus/{clue['clue_word'].lower()}.png" if img_path else None
+                with ThreadPoolExecutor(max_workers=6) as executor:
+                    executor.map(fetch_clue_image, puzzle['clues'])
 
                 puzzles.append(puzzle)
 
